@@ -7,6 +7,8 @@ This script shows how to load the data of a scenario from excel.
 import ixmp as ix
 import message_ix
 
+from utilities.initialize_items import init_new_items
+
 # Specifying model and scenario that we want to save in our database
 model = "MESSAGE_CAS"
 scenario = "baseline"
@@ -23,8 +25,11 @@ xls_file = xls_path + '\\' + file_name
 # 2.1) By loading local default database
 mp = ix.Platform()
 
-# 2.2)creating a new (empty) scenario
+# 2.2) Creating a new (empty) scenario
 sc = message_ix.Scenario(mp, model, scenario, version='new')
+
+# 2.3) Initializing new sets and parameters
+init_new_items(sc)
 
 # 3) Reading data from Excel
 sc.read_excel(xls_file, add_units=True, init_items=True, commit_steps=True)
