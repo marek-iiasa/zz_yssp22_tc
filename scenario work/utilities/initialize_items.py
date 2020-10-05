@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Created on Mon Oct  5 09:50:11 2020
-
-@author: zakeri
+This script add new items (sets, parameters, and variables) to a MESSAGEix
+scenario. A new item is an item that is not defined by default in a scenario.
 """
 
 # Initializing new sets and parameters if needed
@@ -52,5 +51,20 @@ def init_new_items(sc):
         try:
             sc.init_par(item, idx_sets=idxs[0], idx_names=idxs[1])
             print('- Parameter {} was initialized.'.format(item))
+        except:
+            pass
+
+    # 3) Adding variables
+    data = {
+        'STORAGE': [
+            ['node', 'technology', 'level', 'commodity', 'year', 'time'],
+            ['node', 'technology', 'level', 'commodity', 'year', 'time'],
+            ],
+        }
+
+    for item, idxs in data.items():
+        try:
+            sc.init_var(item, idx_sets=idxs[0], idx_names=idxs[1])
+            print('- Variable {} was initialized.'.format(item))
         except:
             pass
