@@ -27,7 +27,7 @@ mp = ix.Platform()
 sc = message_ix.Scenario(mp, model, scenario, version='new')
 
 # 3) Reading data from Excel
-sc.read_excel(xls_file, add_units=True, init_items=True, commit_step=True)
+sc.read_excel(xls_file, add_units=True, init_items=True, commit_steps=True)
 
 # 4) Solving the model
 # An optional name for the scenario GDX files
