@@ -2,3 +2,5 @@
 *.~gm
 
 *.pyc
+
+scenario work/.ipynb_checkpoints/
