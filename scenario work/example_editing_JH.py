@@ -34,7 +34,35 @@ sc_new = sc.clone(model, scenario +'_JH10')
 if sc_new.has_solution():
     sc_new.remove_solution()
 
+#%% Required utilities
+# Adding mapping sets of new parameters
+def update_mapping_sets(sc, par_list=['relation_lower_time', 'relation_upper_time']):
+    sc.check_out()
+    for parname in par_list:
+        setname = 'is_' + parname
 
+        # initiating the sets
+        idx_s = sc.idx_sets(parname)
+        idx_n = sc.idx_names(parname)
+        try:
+            sc.set(setname)
+        except:
+            sc.init_set(setname, idx_sets=idx_s, idx_names=idx_n)
+            print('- Set {} was initiated.'.format(setname))
+
+        # emptying old data in sets
+        df = sc.set(setname)
+        sc.remove_set(setname, df)
+
+        # adding data to the mapping sets
+        df = sc.par(parname)
+        if not df.empty:
+            for i in df.index:
+                d = df.loc[i, :].copy().drop(['value', 'unit'])
+                sc.add_set(setname, d)
+
+            print('- Mapping sets updated for "{}"'.format(setname))
+    sc.commit('')
 #%% Changing share of variable renewable energy in 2050 (if this share exists)
 sc_new.check_out()
 df = sc_new.par('relation_activity_time', {'relation': 'share_renewable',
@@ -240,7 +268,11 @@ df['relation'] = new_relation
 sc_new.add_par('relation_lower_time', df)
 sc_new.commit('')
 
-#%%
+#%% Notice: Update mapping sets for new parameters, whenever you change
+# new parameters, e.g., relation_activity_time:
+update_mapping_sets(sc)
+
+#%% Solving the scenario
 # 5) Exporting scenario data to GAMS gdx and solve the model
 # 5.1) An optional name for the scenario GDX files
 caseName = sc_new.model + '__' + sc_new.scenario + '_JH_v' + str(sc_new.version)

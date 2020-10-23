@@ -1,0 +1,893 @@
+
+--- Job MESSAGE/model_core.gms Start 11/27/19 11:29:05 24.8.2 r59988 WEX-WEI x86 64bit/MS Windows
+GAMS 24.8.2   Copyright (C) 1987-2017 GAMS Development. All rights reserved
+Licensee: Small MUD - 5 User License Generic             S160905:1044AO-GEN
+          IIASA, Information and Communication Technologies Dep.      DC216
+          License for teaching and research at degree granting institutions
+--- Starting compilation
+--- MESSAGE/model_core.gms(111) 2 Mb 4 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(113) 2 Mb 5 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(115) 2 Mb 7 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(118) 2 Mb 8 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(121) 2 Mb 9 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(128) 2 Mb 10 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(134) 2 Mb 11 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(140) 2 Mb 13 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(142) 2 Mb 14 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(166) 2 Mb 15 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(176) 2 Mb 16 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(178) 2 Mb 17 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(183) 3 Mb 19 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(184) 3 Mb 21 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(192) 3 Mb 22 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(199) 3 Mb 23 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(200) 3 Mb 24 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(201) 3 Mb 25 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(202) 3 Mb 26 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(203) 3 Mb 27 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(204) 3 Mb 28 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(205) 3 Mb 29 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(206) 3 Mb 30 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(207) 3 Mb 31 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(208) 3 Mb 32 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(209) 3 Mb 33 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(210) 3 Mb 34 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(238) 3 Mb 35 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(329) 3 Mb 38 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(376) 3 Mb 39 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(378) 3 Mb 40 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(379) 3 Mb 41 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(381) 3 Mb 42 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(382) 3 Mb 44 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(383) 3 Mb 46 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(385) 3 Mb 47 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(387) 3 Mb 48 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(392) 3 Mb 49 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(393) 3 Mb 50 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(394) 3 Mb 53 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(395) 3 Mb 54 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(396) 3 Mb 55 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(397) 3 Mb 58 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(402) 3 Mb 59 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(403) 3 Mb 60 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(404) 3 Mb 62 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(405) 3 Mb 64 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(406) 3 Mb 65 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(407) 3 Mb 66 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(408) 3 Mb 68 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(412) 3 Mb 70 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(413) 3 Mb 71 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(415) 3 Mb 72 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(418) 3 Mb 73 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(421) 3 Mb 74 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(424) 3 Mb 75 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(425) 3 Mb 77 Errors
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(488) 3 Mb 81 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+--- MESSAGE/model_core.gms(490) 3 Mb 82 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(504) 3 Mb 83 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(505) 3 Mb 84 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(522) 3 Mb 85 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(527) 3 Mb 86 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(528) 3 Mb 88 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(529) 3 Mb 89 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(595) 3 Mb 90 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(596) 3 Mb 98 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(598) 3 Mb 100 Errors
+*** Error  37 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=l=' or '=e=' or '=g=' operator expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(614) 3 Mb 101 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(615) 3 Mb 102 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(617) 3 Mb 104 Errors
+*** Error  37 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=l=' or '=e=' or '=g=' operator expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(633) 3 Mb 105 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(634) 3 Mb 106 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(636) 3 Mb 107 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(637) 3 Mb 108 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(665) 3 Mb 110 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(687) 3 Mb 111 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(689) 3 Mb 112 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(690) 3 Mb 113 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(711) 3 Mb 115 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(748) 3 Mb 116 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(765) 3 Mb 117 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(786) 3 Mb 119 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(787) 3 Mb 120 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(788) 3 Mb 121 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(808) 3 Mb 122 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(830) 3 Mb 123 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(858) 3 Mb 125 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(860) 3 Mb 127 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(861) 3 Mb 128 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(868) 3 Mb 129 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(872) 3 Mb 130 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(873) 3 Mb 131 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(909) 3 Mb 132 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(939) 3 Mb 133 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(940) 3 Mb 134 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(941) 3 Mb 135 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(968) 3 Mb 136 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(971) 3 Mb 137 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1028) 3 Mb 138 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1029) 3 Mb 140 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1058) 3 Mb 142 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1059) 3 Mb 144 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(1065) 3 Mb 145 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1101) 3 Mb 147 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(1124) 3 Mb 148 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1125) 3 Mb 151 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1126) 3 Mb 152 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1138) 3 Mb 153 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1139) 3 Mb 156 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1140) 3 Mb 157 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1153) 3 Mb 158 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1154) 3 Mb 159 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1156) 3 Mb 160 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1157) 3 Mb 161 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1169) 3 Mb 162 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1172) 3 Mb 163 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1173) 3 Mb 164 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1186) 3 Mb 165 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1193) 3 Mb 166 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1194) 3 Mb 167 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1208) 3 Mb 168 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1213) 3 Mb 169 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1235) 3 Mb 170 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1256) 3 Mb 171 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1280) 3 Mb 173 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(1282) 3 Mb 174 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1293) 3 Mb 176 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(1310) 3 Mb 177 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1352) 3 Mb 180 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1354) 3 Mb 182 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(1355) 3 Mb 183 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1357) 3 Mb 184 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1371) 3 Mb 186 Errors
+*** Error 120 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown identifier entered as set
+*** Error 340 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    A label/element with the same name exist. You may have forgotten
+       to quote a label/element reference. For example,
+       set i / a,b,c /; parameter x(i); x('a') = 10;
+--- MESSAGE/model_core.gms(1372) 3 Mb 187 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1401) 3 Mb 188 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1464) 3 Mb 189 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1466) 3 Mb 191 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1468) 3 Mb 192 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1469) 3 Mb 193 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1475) 3 Mb 196 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1477) 3 Mb 200 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+*** Error   7 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '(' expected
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+--- MESSAGE/model_core.gms(1485) 3 Mb 209 Errors
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 441 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected TO or DOWNTO. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error 442 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected a ',' or BY. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error  10 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ',' expected
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+--- MESSAGE/model_core.gms(1502) 3 Mb 213 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1521) 3 Mb 214 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1523) 3 Mb 216 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1525) 3 Mb 217 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1526) 3 Mb 218 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1532) 3 Mb 220 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1534) 3 Mb 224 Errors
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+*** Error   7 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '(' expected
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+--- MESSAGE/model_core.gms(1542) 3 Mb 233 Errors
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 441 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected TO or DOWNTO. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error 442 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected a ',' or BY. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error  10 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ',' expected
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+--- MESSAGE/model_core.gms(1555) 3 Mb 237 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1574) 3 Mb 238 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1579) 3 Mb 239 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1580) 3 Mb 240 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1589) 3 Mb 241 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1590) 3 Mb 245 Errors
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+*** Error   7 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '(' expected
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+--- MESSAGE/model_core.gms(1599) 3 Mb 254 Errors
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 441 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected TO or DOWNTO. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error 442 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected a ',' or BY. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error  10 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ',' expected
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+--- MESSAGE/model_core.gms(1612) 3 Mb 255 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1633) 3 Mb 256 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1638) 3 Mb 257 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1639) 3 Mb 258 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1649) 3 Mb 262 Errors
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+*** Error   7 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '(' expected
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+--- MESSAGE/model_core.gms(1658) 3 Mb 271 Errors
+*** Error  36 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=' or '..' or ':=' or '$=' operator expected
+    rest of statement ignored
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 441 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected TO or DOWNTO. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error   2 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Identifier expected
+*** Error 119 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Number (primary) expected
+*** Error 442 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Expected a ',' or BY. The general syntax of a FOR statement is
+      FOR ( i = start TO/DOWNTO end [BY increment] , statements )
+*** Error  10 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ',' expected
+*** Error   8 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    ')' expected
+--- MESSAGE/model_core.gms(1671) 3 Mb 272 Errors
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1700) 3 Mb 273 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1704) 3 Mb 274 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1706) 3 Mb 275 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1707) 3 Mb 276 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1735) 3 Mb 277 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1736) 3 Mb 278 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1739) 3 Mb 279 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1742) 3 Mb 280 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1762) 3 Mb 281 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1783) 3 Mb 282 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1787) 3 Mb 283 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1788) 3 Mb 284 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1795) 3 Mb 285 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1799) 3 Mb 286 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1816) 3 Mb 287 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1820) 3 Mb 288 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1821) 3 Mb 289 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1832) 3 Mb 290 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1853) 3 Mb 291 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1856) 3 Mb 292 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1858) 3 Mb 293 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1859) 3 Mb 294 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1867) 3 Mb 295 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1874) 3 Mb 296 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1892) 3 Mb 297 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1897) 3 Mb 298 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1899) 3 Mb 299 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1906) 3 Mb 300 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1913) 3 Mb 301 Errors
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1947) 3 Mb 303 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+*** Error 171 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Domain violation for set
+--- MESSAGE/model_core.gms(1948) 3 Mb 304 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1952) 3 Mb 305 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1968) 3 Mb 306 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1970) 3 Mb 308 Errors
+*** Error  37 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=l=' or '=e=' or '=g=' operator expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1979) 3 Mb 309 Errors
+*** Error 140 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unknown symbol
+--- MESSAGE/model_core.gms(1981) 3 Mb 311 Errors
+*** Error  37 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    '=l=' or '=e=' or '=g=' operator expected
+*** Error 409 in C:\Users\zakeri\Documents\Github\message_ix\message_ix\model\MESSAGE/model_core.gms
+    Unrecognizable item - skip to find a new statement
+      looking for a ';' or a key word to get started again
+--- MESSAGE/model_core.gms(1992) 3 Mb 311 Errors
+*** Status: Compilation error(s)
+--- Job MESSAGE/model_core.gms Stop 11/27/19 11:29:06 elapsed 0:00:00.701
+Exit code = 2
