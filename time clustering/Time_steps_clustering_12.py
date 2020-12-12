@@ -12,10 +12,10 @@ import matplotlib.cm as cm1
 import xarray as xr
 from datetime import timedelta
 
-def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_night,path): 
+def algorithm(data,name,value,solarweight,windweight,hydroweight,demandweight,mid_night,path): 
 
     dt = data.values
-    total_regions = len(regions)
+    total_regions = len(name)
     solar_and_wind_seasonal = np.zeros(shape=(12))
     solar_and_wind_sorter_seasonal = np.zeros(shape=(12))
     solar_and_wind_duration_curve_seasonal =  np.zeros(shape=(8760))
@@ -29,11 +29,11 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
     while region < total_regions:
         
         # Hourly salor, wind, hydro and demand data.
-        solar = dt[:,1+5*region]
-        wind = dt[:,2+5*region]
-        hydro = dt[:,4+5*region]
-        demand = dt[:,3+5*region]
-        demand_MW = dt[:,5+5*region]
+        solar = dt[:,1+5*value[region]]
+        wind = dt[:,2+5*value[region]]
+        hydro = dt[:,4+5*value[region]]
+        demand = dt[:,3+5*value[region]]
+        demand_MW = dt[:,5+5*value[region]]
         
         # Yearly hourly load curve
         solar_load_curve_annual = np.sort(solar, axis=None)[::-1]
@@ -162,7 +162,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
                     demand_results_sorted_seasonal[6:12] = d_su_4_sorted 
                                     
                 d1 = d1 + mid_night
-                print('r ' + regions[region] + ' - w '+ str(w) + ' - d '+ str(d1))
+                print('r ' + name[region] + ' - w '+ str(w) + ' - d '+ str(d1))
             w = w + 1
         
         solar_load_curve_seasonal =  np.zeros(shape=(8760))
@@ -237,7 +237,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
             ax.plot(x_axis[1:7], np.sort(solar_and_wind_sorter_seasonal[n,0:6], axis=None)[::-1], color="b")
             ax.set_xlabel("Time Slices")
             ax.set_ylabel("%")
-            ax.set_title(regions[region]+' - '+ s_w_h_ds[s_w_h_d]+' - Winter')
+            ax.set_title(name[region]+' - '+ s_w_h_ds[s_w_h_d]+' - Winter')
             ax.set_xlim([1,6])
             ax.set_ylim([0,1])
             ax2.plot(x2_axis[1:2191+2190], solar_and_wind_duration_curve_seasonal[n,0:2190+2190], color="r")
@@ -251,7 +251,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
             ax.plot(x_axis[1:7], np.sort(solar_and_wind_sorter_seasonal[n,6:12], axis=None)[::-1], color="b")
             ax.set_xlabel("Time Slices")
             ax.set_ylabel("%")
-            ax.set_title(regions[region]+' - '+ s_w_h_ds[s_w_h_d]+' - Summer')
+            ax.set_title(name[region]+' - '+ s_w_h_ds[s_w_h_d]+' - Summer')
             ax.set_xlim([1,6])
             ax.set_ylim([0,1])
             ax2.plot(x2_axis[1:2191+2190], solar_and_wind_duration_curve_seasonal[n,2190+2190:2190+2190+2190+2190], color="r")
@@ -263,7 +263,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
             plt.tight_layout()
             fig.subplots_adjust(hspace=0.6, wspace=0.4)
     
-            plt.savefig(path+'Results/12 Time slices '+ regions[region]+' seasonal '+s_w_h_ds[s_w_h_d])
+            plt.savefig(path+'Results/12 Time slices '+ name[region]+' seasonal '+s_w_h_ds[s_w_h_d])
             
             n = n + 1
             s_w_h_d = s_w_h_d + 1      
@@ -285,7 +285,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
         ax.plot(x_axis[1:13], solar_and_wind_sorter_annual[n,:], color="b")
         ax.set_xlabel("Time Slices")
         ax.set_ylabel("%")
-        ax.set_title(regions[region]+' '+s_w_h_ds[s_w_h_d])
+        ax.set_title(name[region]+' '+s_w_h_ds[s_w_h_d])
         ax.set_xlim([1,12])
         ax.set_ylim([0,1])
         ax2.plot(x2_axis[1:8761], solar_and_wind_duration_curve_annual[n,:], color="r")
@@ -302,7 +302,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
         ax.plot(x_axis[1:13], solar_and_wind_sorter_annual[n,:], color="b")
         ax.set_xlabel("Time Slices")
         ax.set_ylabel("%")
-        ax.set_title(regions[region]+' '+s_w_h_ds[s_w_h_d])
+        ax.set_title(name[region]+' '+s_w_h_ds[s_w_h_d])
         ax.set_xlim([1,12])
         ax.set_ylim([0,1])
         ax2.plot(x2_axis[1:8761], solar_and_wind_duration_curve_annual[n,:], color="r")
@@ -319,7 +319,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
         ax.plot(x_axis[1:13], solar_and_wind_sorter_annual[n,:], color="b")
         ax.set_xlabel("Time Slices")
         ax.set_ylabel("%")
-        ax.set_title(regions[region]+' '+s_w_h_ds[s_w_h_d])
+        ax.set_title(name[region]+' '+s_w_h_ds[s_w_h_d])
         ax.set_xlim([1,12])
         ax.set_ylim([0,1])
         ax2.plot(x2_axis[1:8761], solar_and_wind_duration_curve_annual[n,:], color="r")
@@ -336,7 +336,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
         ax.plot(x_axis[1:13], solar_and_wind_sorter_annual[n,:], color="b")
         ax.set_xlabel("Time Slices")
         ax.set_ylabel("%")
-        ax.set_title(regions[region]+' '+s_w_h_ds[s_w_h_d])
+        ax.set_title(name[region]+' '+s_w_h_ds[s_w_h_d])
         ax.set_xlim([1,12])
         ax.set_ylim([0,1])
         ax2.plot(x2_axis[1:8761], solar_and_wind_duration_curve_annual[n,:], color="r")
@@ -348,7 +348,7 @@ def algorithm(data,regions,solarweight,windweight,hydroweight,demandweight,mid_n
         plt.tight_layout()
         fig.subplots_adjust(hspace=0.6, wspace=0.4)
         
-        plt.savefig(path+'Results/12 Time slices '+regions[region]+' annual '+s_w_h_ds[s_w_h_d])    
+        plt.savefig(path+'Results/12 Time slices '+ name[region]+' annual '+s_w_h_ds[s_w_h_d])    
        
         n = n + 1        
         region = region + 1
