@@ -13,9 +13,9 @@ from datetime import datetime
 
 # Input data
 model = 'MESSAGE_CASm'
-scenario = "compact"
+scenario = "jh_protocol"
 version = 2
-new_scenario = 'jh_protocol'
+new_scenario = 'jh_protocol_test'
 run_mode = 'MESSAGE'
 
 
@@ -53,7 +53,7 @@ def update_mapping_sets(sc, par_list=['relation_upper_time',
 # %% Loading platform and scenario
 mp = ix.Platform(name='ene_ixmp', jvmargs=['-Xms800m', '-Xmx8g'])
 sc_ref = message_ix.Scenario(mp, model, scenario, version)
-sc = sc_ref.clone(scenario=new_scenario, keep_solution=False)
+sc = sc_ref.clone(scenario=new_scenario)
 
 # Removing the solution
 sc.remove_solution()
