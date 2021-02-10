@@ -77,7 +77,7 @@ sc.remove_par('relation_activity_time', df)
 # Second, adding a share for solar and wind
 df = df.loc[df['technology'].isin(['solar_pv_ppl', 'wind_ppl',
                                    'elec_t_d_cas'])]  # needed as the basis for share
-# Third changing the share value to e.g. 80%
+# Third changing the share value to e.g. 50%
 df.loc[df['technology'] == 'elec_t_d_cas', 'value'] = -0.5
 sc.add_par('relation_activity_time', df)
 
@@ -209,6 +209,8 @@ else:
 act = sc.var("ACT", {'node_loc': node, 'technology': tec_list,
                      'year_act': yr, 'time': times}
              ).groupby(['time', 'technology']).sum().reset_index()
+act['time'] = [int(x) for x in act['time']]
+act = act.sort_values(['time'])
 
 fig = plt.figure('energy')
 for tec in tec_list:
