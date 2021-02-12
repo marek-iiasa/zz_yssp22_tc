@@ -70,15 +70,18 @@ df = sc.par('inv_cost', {'technology': ['hydro_pump', 'pump', 'turbine']})
 df['value'] = 0
 sc.add_par('inv_cost', df)
 
-# 3) adding a renewable electricity target of 80% from wind and solar in the whole region in 2050
+# 3) adding a renewable electricity target of 50% in 2030 and 80% in 2050 for the whole region
 df = sc.par('relation_activity_time', {'relation': 'share_renewable'})
 # First, removing hydro from renewable share
 sc.remove_par('relation_activity_time', df)
 # Second, adding a share for solar and wind
 df = df.loc[df['technology'].isin(['solar_pv_ppl', 'wind_ppl',
                                    'elec_t_d_cas'])]  # needed as the basis for share
-# Third changing the share value to e.g. 50%
-df.loc[df['technology'] == 'elec_t_d_cas', 'value'] = -0.5
+# Third changing the share value to e.g. 50% for 2030 and 80% for 2050
+df.loc[(df['technology'] == 'elec_t_d_cas') & (
+    df['year_rel'].isin([2030, 2035, 2040])), 'value'] = -0.5
+df.loc[(df['technology'] == 'elec_t_d_cas') & (
+    df['year_rel'].isin([2045, 2050, 2055, 2060])), 'value'] = -0.8
 sc.add_par('relation_activity_time', df)
 
 # 4) Removing bound activity up and down for generation technologies
@@ -119,7 +122,7 @@ print('Elapsed time for solving:', int((end - start)/60), 'min and', round((
 from matplotlib import pyplot as plt
 node = 'TAJ'
 pumped_hydro = True
-yr = 2020
+yr = 2030
 
 # Storage technology: 'hydro_dam': reservoir hydro, 'hydro_pump': pumped hydro
 if pumped_hydro:
@@ -154,8 +157,8 @@ init = float(sc.var("STORAGE_INIT", {'node': node, 'technology': tec_st,
 
 # The optimal value of the initial value
 initial_percent = (init / time_duration) / cap_dam
-print('- The initial content of storage is {} of storage capacity.'.format(
-    str(initial_percent * 100).split(".")[0] + '%'))
+print('- The initial content of {} is {} of storage capacity.'.format(
+    tec_st, str(initial_percent * 100).split(".")[0] + '%'))
 
 # Plotting the state of charge of storage
 fig = plt.figure()
@@ -196,7 +199,7 @@ plt.step(dem['time'], dem['value'], label='demand', where='mid')
 
 # Adding legend
 plt.legend(loc='upper right', ncol=2)
-plt.title('Water demand and activity of storage technologies')
+plt.title('Water demand and activity of storage technologies in {}'.format(yr))
 
 # Plot for energy
 if pumped_hydro:
@@ -229,4 +232,4 @@ plt.step(dem.index, dem['lvl'], label='demand', where='mid')
 
 # Adding legend
 plt.legend(loc='upper right', ncol=2)
-plt.title('Electricity demand and activity of storage technologies (GWa)')
+plt.title('Electricity demand and activity of technologies (GWa) in {}'.format(yr))
