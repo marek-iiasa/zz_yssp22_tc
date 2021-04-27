@@ -255,14 +255,17 @@ new = new[times]
 old['sub-annual'] = new.sum(axis=1)
 old.index = [x[0].split('_')[1] for x in old.index]
 
+new = old.sum(axis=0).to_frame().copy()
+new.columns = ['World']
+
 # Plotting
-plot_new_old(new, old,
-             'Electricity generation (GWa) from {} in {}'.format(tecs, yr[0]),
-             True)
+plot_new_old(new.T, old,
+             'Electricity generation (GWa) from {} in {}'.format(tecs, yr[0]))
 
 # 7.2) Emissions in one year
-old = sc_ref.var('ACT', {'technology': 'CO2_TCE', 'year_act': yr})
-new = sc.var('ACT', {'technology': 'CO2_TCE', 'year_act': yr})
+tec = 'CO2_TCE'
+old = sc_ref.var('ACT', {'technology': tec, 'year_act': yr})
+new = sc.var('ACT', {'technology': tec, 'year_act': yr})
 
 # Sorting
 old = grouping(old, grpby=['node_loc', 'technology', 'time'], col_idx='time',
@@ -283,8 +286,8 @@ plot_new_old(new.T, old,
 
 # %% 8) Plotting one output for all regions for the entire model horizon
 # 8.1) Average output for all regions
-old = sc_ref.var('ACT', {'technology': 'CO2_TCE'})
-new = sc.var('ACT', {'technology': 'CO2_TCE'})
+old = sc_ref.var('ACT', {'technology': tec})
+new = sc.var('ACT', {'technology': tec})
 
 # Sorting
 old = grouping(old, grpby=['node_loc', 'year_act'], col_idx='year_act',
@@ -301,9 +304,9 @@ new.columns = ['World']
 # Plotting
 plot_new_old(new.T, old, 'Average CO2 emissions (GtCO2/yr) (2020-2100)')
 
-# 8.1) Total output for all regions for the entire model horizon
-old = sc_ref.var('ACT', {'technology': 'CO2_TCE'})
-new = sc.var('ACT', {'technology': 'CO2_TCE'})
+# %% 8.1) Total output for all regions for the entire model horizon
+old = sc_ref.var('ACT', {'technology': tec})
+new = sc.var('ACT', {'technology': tec})
 
 # Sorting
 old = grouping(old, grpby=['node_loc', 'year_act'], col_idx='year_act',
@@ -325,3 +328,31 @@ new = old.sum(axis=0).to_frame().copy()
 new.columns = ['World']
 # Plotting
 plot_new_old(new.T, old, 'Total CO2 emissions (GtCO2) (2020-2100)')
+
+# 8.2) Total output for one technology
+tec = 'solar_pv_ppl'
+unit_conv = (8760/1000) / 1000   # from GWa to PWh
+title = 'Total electricity generation solar PV (PWh) 2020-2100'
+old = sc_ref.var('ACT', {'technology': tec})
+new = sc.var('ACT', {'technology': tec, 'time': 'year'})
+
+# Sorting
+old = grouping(old, grpby=['node_loc', 'year_act'], col_idx='year_act',
+               value='lvl', rename=rename)
+new = grouping(new, grpby=['node_loc', 'year_act'], col_idx='year_act',
+               value='lvl', rename=rename)
+
+# cumulative
+old = cumulative_output(sc_ref, old).sum(axis=1).to_frame()
+old.columns = ['year']
+new = cumulative_output(sc, new)
+
+old['sub-annual'] = new.sum(axis=1)
+old.index = [x.split('_')[1] for x in old.index]
+old *= unit_conv
+
+# old.loc['World', :] = old.sum(axis=0)
+new = old.sum(axis=0).to_frame().copy()
+new.columns = ['World']
+# Plotting
+plot_new_old(new.T, old, title)
