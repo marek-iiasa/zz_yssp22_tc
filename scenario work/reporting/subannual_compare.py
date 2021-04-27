@@ -28,7 +28,7 @@ version_ref = 4
 # 2.2. Scenario with sub-annual time slices
 model_new = 'ENGAGE_SSP2_v4.1.2'
 scenario_new = "baseline_t12"
-version_new = 10
+version_new = 13
 
 # 3. Loading scenarios and main characteristics
 # 3.1. Scenarios
@@ -39,7 +39,7 @@ sc = message_ix.Scenario(mp, model_new, scenario_new, version_new)
 # Nodes
 regions = [x for x in sc.set('node') if x not in ['World', 'R11_GLB']]
 # Sample region
-reg = ['R11_WEU']
+reg = ['R11_LAM']
 
 # Years
 years = [x for x in sc.set('year') if x >= sc.firstmodelyear]
@@ -50,10 +50,10 @@ yr = [2030]
 times = [x for x in sc.set('time') if x not in ['year']]
 
 # Electricity sectors (demand side)
-sectors = ['rc_spec']     # ['i_spec', 'rc_spec']
+sectors = ['i_spec', 'rc_spec']     # ['i_spec', 'rc_spec']
 
 # Technologies (doesn't need to relate to sectors)
-tecs = ['solar_pv_ppl', 'wind_ppl']
+tecs = ['solar_pv_ppl'] #, 'wind_ppl']
 
 # %% 4. Required utility functions
 rename = {
@@ -90,6 +90,7 @@ def grouping(df, grpby=['node_loc', 'technology', 'time'],
 
 # A function for plotting new and old data
 def plot_new_old(df1, df2, tit, capacity=False):
+    # df1.index = [x[0] for x in df1.index]
     # For capacity-related data no time slice needed
     if capacity:
         df2.plot(kind='bar', rot=30)
@@ -124,6 +125,14 @@ def sort_time(df, times, col='time'):
     df[col].cat.set_categories(times, inplace=True)
     return df.sort_values([col])
 
+
+# A utility for calculating cumulative output
+def cumulative_output(sc, df):
+    dur = sc.par('duration_period').set_index(['year'])
+    for i in df.columns:
+        df.loc[:, i] *= float(dur.loc[i, 'value'])
+    return df
+
 # %% 5. Comparing some input data
 # Notice: for sub-annual time slices, it's better to filter with "time"
 
@@ -143,7 +152,8 @@ old['sub-annual'] = new.sum(axis=1)
 
 # Plotting
 plot_new_old(old, new,
-             'Electricity demand (GWa) in {}'.format(reg[0].split("_")[1]))
+             'Electricity demand (GWa) {} {}'.format(reg[0].split("_")[1],
+                                                     yr[0]))
 
 # 5.1.2. Capacity factor of one or more technologies by time for one region
 old = sc_ref.par('capacity_factor', {'node_loc': reg, 'technology': tecs,
@@ -211,7 +221,8 @@ old['sub-annual'] = new.sum(axis=1)
 
 # Plotting
 plot_new_old(old, new,
-             'Electricity generation (GWa) in {}'.format(reg[0].split("_")[1]))
+             'Electricity generation (GWa) {} {}'.format(reg[0].split("_")[1],
+                                                         yr[0]))
 
 # 6.1.2. Capacity of one or more technologies by time for one region
 old = sc_ref.var('CAP', {'node_loc': reg, 'technology': tecs, 'year_act': yr})
@@ -228,5 +239,89 @@ old['sub-annual'] = new.sum(axis=1)
 
 # Plotting
 plot_new_old(new, old,
-             'Installed capacity (GW) in {}'.format(reg[0].split("_")[1]),
+             'Installed capacity (GW) {} {}'.format(
+                 reg[0].split("_")[1], yr[0]), True)
+
+# %% 7) Plotting one output for all regions in one year
+old = sc_ref.var('ACT', {'technology': tecs, 'year_act': yr})
+new = sc.var('ACT', {'technology': tecs, 'year_act': yr, 'time': times})
+
+# Sorting
+old = grouping(old, grpby=['node_loc', 'technology', 'time'], col_idx='time',
+               value='lvl', rename=rename)
+new = grouping(new, grpby=['node_loc', 'technology', 'time'], col_idx='time',
+               value='lvl', rename=rename)
+new = new[times]
+old['sub-annual'] = new.sum(axis=1)
+old.index = [x[0].split('_')[1] for x in old.index]
+
+# Plotting
+plot_new_old(new, old,
+             'Electricity generation (GWa) from {} in {}'.format(tecs, yr[0]),
              True)
+
+# 7.2) Emissions in one year
+old = sc_ref.var('ACT', {'technology': 'CO2_TCE', 'year_act': yr})
+new = sc.var('ACT', {'technology': 'CO2_TCE', 'year_act': yr})
+
+# Sorting
+old = grouping(old, grpby=['node_loc', 'technology', 'time'], col_idx='time',
+               value='lvl', rename=rename)
+new = grouping(new, grpby=['node_loc', 'technology', 'time'], col_idx='time',
+               value='lvl', rename=rename)
+# new = new[times]
+old['sub-annual'] = new.sum(axis=1)
+old.index = [x[0].split('_')[1] for x in old.index]
+old *= (44/12)/1000
+
+# old.loc['World', :] = old.sum(axis=0)
+new = old.sum(axis=0).to_frame().copy()
+new.columns = ['World']
+# Plotting
+plot_new_old(new.T, old,
+             'CO2 emissions (GtCO2/yr) in {}'.format(yr[0]))
+
+# %% 8) Plotting one output for all regions for the entire model horizon
+# 8.1) Average output for all regions
+old = sc_ref.var('ACT', {'technology': 'CO2_TCE'})
+new = sc.var('ACT', {'technology': 'CO2_TCE'})
+
+# Sorting
+old = grouping(old, grpby=['node_loc', 'year_act'], col_idx='year_act',
+               value='lvl', rename=rename)
+new = grouping(new, grpby=['node_loc', 'year_act'], col_idx='year_act',
+               value='lvl', rename=rename)
+old['year'] = old.mean(axis=1)
+old['sub-annual'] = new.mean(axis=1)
+old.index = [x.split('_')[1] for x in old.index]
+old *= (44/12)/1000
+old = old[['year', 'sub-annual']].copy()
+new = old.sum(axis=0).to_frame().copy()
+new.columns = ['World']
+# Plotting
+plot_new_old(new.T, old, 'Average CO2 emissions (GtCO2/yr) (2020-2100)')
+
+# 8.1) Total output for all regions for the entire model horizon
+old = sc_ref.var('ACT', {'technology': 'CO2_TCE'})
+new = sc.var('ACT', {'technology': 'CO2_TCE'})
+
+# Sorting
+old = grouping(old, grpby=['node_loc', 'year_act'], col_idx='year_act',
+               value='lvl', rename=rename)
+new = grouping(new, grpby=['node_loc', 'year_act'], col_idx='year_act',
+               value='lvl', rename=rename)
+
+# cumulative
+old = cumulative_output(sc_ref, old).sum(axis=1).to_frame()
+old.columns = ['year']
+new = cumulative_output(sc, new)
+
+old['sub-annual'] = new.sum(axis=1)
+old.index = [x.split('_')[1] for x in old.index]
+old *= (44/12)/1000
+
+# old.loc['World', :] = old.sum(axis=0)
+new = old.sum(axis=0).to_frame().copy()
+new.columns = ['World']
+# Plotting
+plot_new_old(new.T, old, 'Total CO2 emissions (GtCO2) (2020-2100)')
