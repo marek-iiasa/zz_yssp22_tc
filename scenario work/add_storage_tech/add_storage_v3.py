@@ -14,7 +14,7 @@ import pandas as pd
 import os
 from itertools import product
 path_files = (r'C:\Users\zakeri\Documents\Github\time_clustering' +
-              r'\scenario_work\add_storage_tech')
+              r'\scenario work\add_storage_tech')
 os.chdir(path_files)
 from copy_par import tec_parameters_copier
 
@@ -213,7 +213,10 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
         par_excl = par_excl + ['input', 'output', 'emission_factor']
 
         pars = [x for x in df.columns if x in sc.par_list() and x not in
-                ['storage_self_discharge', 'storage_initial']]
+                ['storage_self_discharge', 'storage_initial'] and x in
+                ['relation_activity_time', 'relation_upper_time',
+                 'relation_lower_time']
+                ]
 
         # Building dictionary of required changes in parameters from Excel
         dict_ch = {}
