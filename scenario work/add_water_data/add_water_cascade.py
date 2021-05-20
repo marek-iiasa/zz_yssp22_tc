@@ -181,10 +181,10 @@ if __name__  == ' __main__':
     mp = ix.Platform()
 
     # test: 'MESSAGE_ID', 'test_12', 2
-    # test: 'MESSAGE_CASm', 'baseline_t12', 10
+    # test: 'MESSAGE_CASm', 'baseline_stor', 10
     model = 'MESSAGE_CASm'
-    scen_ref = 'baseline_t12'
-    version_ref = 10
+    scen_ref = 'baseline_t12_stor'
+    version_ref = 6
     
     filename = 'setup_water.xlsx'  # Name of the input Excel file
     water_com = 'water'  # water commodity (if to be excluded from solution)
