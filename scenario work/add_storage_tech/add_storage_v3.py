@@ -193,15 +193,28 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                     sc.add_par(parname, d)
             print('- Storage reservoir parameters added for {}'.format(tec))
 
-        # Transferring historical activity if needed
+        # Transferring historical data if needed
         if not pd.isna(df.loc[tec, 'historical']):
             tec_hist = df.loc[tec, 'historical']
             for parname in ['historical_activity', 'historical_new_capacity']:
                 hist = sc.par(parname, {'technology': tec_hist,
                                         'node_loc': nodes})
+                
+                # Adding new data
                 hist['technology'] = tec
                 sc.add_par(parname, hist)
-            removal = removal + [[tec_hist, nodes]]
+                removal = removal + [(parname, tec_hist, nodes)]
+
+        # Transferring relation activity if needed
+        if not pd.isna(df.loc[tec, 'relation']):
+            tec_rel = df.loc[tec, 'relation']
+            parname = 'relation_activity_time'
+            rel = sc.par(parname, {'technology': tec_rel, 'node_loc': nodes})
+            
+            # Adding new data
+            rel['technology'] = tec
+            sc.add_par(parname, rel)
+            removal = removal + [(parname, tec_rel, nodes)]
 
         sc.commit('')
 
@@ -210,12 +223,11 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                     any(y in x for y in ['bound_',
                                          'historical',
                                          'relation_'])]
-        par_excl = par_excl + ['input', 'output', 'emission_factor']
+        par_excl = par_excl + ['input', 'output', 'emission_factor',
+                               'relation_activity']
 
         pars = [x for x in df.columns if x in sc.par_list() and x not in
-                ['storage_self_discharge', 'storage_initial'] and x in
-                ['relation_activity_time', 'relation_upper_time',
-                 'relation_lower_time']
+                ['storage_self_discharge', 'storage_initial']
                 ]
 
         # Building dictionary of required changes in parameters from Excel
@@ -225,18 +237,20 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
             dict_ch[parname] = [{'node_loc': [nodes]}, {'value': value}]
                 
         # Copying parameters from existing to new technologies
-        d1, d2 = tec_parameters_copier(sc, sc, tec_ref, tec, nodes_ref, nodes,
-                                       add_tec=False, dict_change=dict_ch,
-                                       par_exclude=par_excl,
-                                       par_remove='all', test_run=False)
+        d1, d2 = tec_parameters_copier(
+            sc, sc, tec_ref, tec, nodes_ref, nodes, add_tec=False,
+            dict_change=dict_ch, par_exclude=par_excl,
+            par_remove='all', test_run=False)
+
     sc.check_out()
-    if not df['historical'].empty:
-        for i, parname in product(removal, ['historical_activity',
-                                            'historical_new_capacity']):
-            hist = sc.par(parname, {'technology': i[0], 'node_loc': i[1]})
-            sc.remove_par(parname, hist)
-        print('- Historical data of {} was'.format(removal),
-              'removed after introducing new storage technologies.')
+    # Removing extra information after creating new storage technologies
+    for (parname, t, region) in removal:
+        old = sc.par(parname, {'technology': t, 'node_loc': region})
+        if not old.empty:
+            sc.remove_par(parname, old)
+            print('- Data of "{}" in parameter "{}"'.format(t, parname),
+                  'was removed for {}'.format(region),
+                  ', after introducing new storage technologies.')
     sc.commit('')
 
     print('- Storage parameterization done successfully for all technologies.')
@@ -285,6 +299,7 @@ if __name__  == ' __main__':
     # test one country: 'MESSAGE_ID', 'test_t4', 3
     # test Central Asia (5 region): 'MESSAGE_CASm', 'baseline_t12', 10
     # test global model R11: 'ENGAGE_SSP2_v4.1.2', 'baseline_t12', 13
+    # test R4: 'MESSAGE_R4', 'baseline_t12', 1
     
     # Reference scenario to clone from
     model = 'ENGAGE_SSP2_v4.1.2'
