@@ -4,7 +4,6 @@ This script does the following:
     1. initializes sets and parameters needed for the modeling of storage
     2. adds storage representation (pumped hydro or reservoir hydro, etc.) to
     an existing model (clones into a new model)
-    3. if needed, add the parametrization of water flows
 
 The input data should be provided through an Excel file (no hardcoded data
 here in python)
@@ -50,7 +49,8 @@ def init_storage(sc):
 
 
 # A function for adding storage technologies to an existing scenario
-def add_storage(sc, setup_file, lvl_temporal, init_items=False):
+def add_storage(sc, setup_file, lvl_temporal, init_items=False,
+                remove_ref=False):
 
     # 1) Initialization if needed
     if init_items:
@@ -96,7 +96,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                                            d_stor['input_commodity'][i]])
     print('- Storage sets and mappings added.')
 
-    # 3) Adding parameter "time_seq" for time order
+    # 3) Parameter "time_order" for the order of time slices in each level
     parname = 'time_order'
     df2 = pd.DataFrame(index=[0], columns=['lvl_temporal', 'time',
                                           'value', 'unit'])
@@ -106,7 +106,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                           'time'].tolist()
     else:
         times = ['year']
-        print('>Warning<: scenario has no time steps at the level specified!')
+        print('>Warning<: scenario has no time steps at the specified level!')
 
     for ti in range(len(times)):
         d = df2.copy()
@@ -134,7 +134,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
             nodes_ref = df.loc[tec, 'node_from'].split('/')
 
         sc.check_out()
-        # 4.1) Adding input and output of storage technology
+        # 4.1) Adding input and output of storage reservoir technology
         for par in ['input', 'output']:
             df_ref = sc.par(par, {'technology': tec_ref, 'node_loc': nodes})
 
@@ -150,20 +150,24 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                 df_ref = sc.par(par, {'technology': tec_lt, 'node_loc': nodes})
 
             df_new = df_ref.copy()
+            
+            # Making sure node_dest/node_origin are the same as node_loc
+            node_col = [x for x in sc.idx_names(par) if
+                        'node' in x and x != 'node_loc'][0]
+            df_new[node_col] = df_new['node_loc']
+            
             df_new['technology'] = tec
             com_list = df.loc[tec, par + '_commodity']
             if not pd.isna(com_list):
-                com_list = com_list.split('/')
-                for com in com_list:
-                    num = com_list.index(com)
+                for num, com in enumerate(com_list.split('/')):
+                    lvl = df.loc[tec, par + '_level'].split('/')[num]
                     df_new['commodity'] = com
-                    df_new['level'] = df.loc[tec,
-                                             par + '_level'].split('/')[num]
+                    df_new['level'] = lvl
                     df_new['value'] = float(str(df.loc[tec, par + '_value']
                                                 ).split('/')[num])
                     sc.add_par(par, df_new)
         print('- Storage "input" and "output" parameters',
-              'configured for {}.'.format(tec))
+              'configured for "{}".'.format(tec))
 
         # 4.2) Adding storage reservoir parameters
         if tec in storage_tecs:
@@ -193,7 +197,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                     sc.add_par(parname, d)
             print('- Storage reservoir parameters added for {}'.format(tec))
 
-        # Transferring historical data if needed
+        # 4.3.1) Transferring historical data if needed
         if not pd.isna(df.loc[tec, 'historical']):
             tec_hist = df.loc[tec, 'historical']
             for parname in ['historical_activity', 'historical_new_capacity']:
@@ -205,7 +209,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
                 sc.add_par(parname, hist)
                 removal = removal + [(parname, tec_hist, nodes)]
 
-        # Transferring relation activity if needed
+        # 4.3.2) Transferring relation activity (Notice: relation capacity?)
         if not pd.isna(df.loc[tec, 'relation']):
             tec_rel = df.loc[tec, 'relation']
             parname = 'relation_activity_time'
@@ -216,42 +220,58 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False):
             sc.add_par(parname, rel)
             removal = removal + [(parname, tec_rel, nodes)]
 
-        sc.commit('')
-
-        # 4.3) Copying all other parameters from a reference technology
-        par_excl = [x for x in sc.par_list() if
-                    any(y in x for y in ['bound_',
-                                         'historical',
-                                         'relation_'])]
-        par_excl = par_excl + ['input', 'output', 'emission_factor',
-                               'relation_activity']
-
+        # 4.3) Adding some parameters and changes in values specified in Excel
         pars = [x for x in df.columns if x in sc.par_list() and x not in
-                ['storage_self_discharge', 'storage_initial']
-                ]
-
-        # Building dictionary of required changes in parameters from Excel
-        dict_ch = {}
+        ['storage_self_discharge', 'storage_initial']
+        ]
+        
         for parname in pars:
-            value = float(df.loc[tec, parname])
-            dict_ch[parname] = [{'node_loc': [nodes]}, {'value': value}]
+            # Loading existing data
+            node_col = [x for x in sc.idx_names(parname) if 'node' in x][0]
+            d = sc.par(parname, {node_col: nodes_ref, 'technology': tec_ref})
+            
+            # Checking if the value is directly from Excel or as a multiplier
+            excl = df.loc[tec, parname]
+            if excl.split(':')[0] == 'value':
+                d['value'] = float(excl.split(':')[1])
+            elif excl.split(':')[0] == 'multiply':
+                d['value'] *= float(excl.split(':')[1])
                 
-        # Copying parameters from existing to new technologies
+            # Renaming technology and node names
+            d['technology'] = tec
+            for node_r, node_n in zip(nodes_ref, nodes):
+                        d = d.replace({node_r: node_n})
+            
+            # Adding the data back to the scenario
+            sc.add_par(parname, d)
+            
+        print('- Data of "{}" copied to "{}"'.format(tec_ref, tec),
+              'for parameters {},'.format(pars), 
+              'with updated values from Excel.')
+        sc.commit('')
+        
+        # 4.4) Copying all other parameters from existing to new technologies
+        par_excl = [x for x in sc.par_list() if any(y in x for y in [
+            'bound_', 'historical_', 'relation_', 'ref_'])]
+        par_excl = par_excl + pars + ['input', 'output', 'emission_factor']
+        dict_ch = {}
+        
         d1, d2 = tec_parameters_copier(
             sc, sc, tec_ref, tec, nodes_ref, nodes, add_tec=False,
             dict_change=dict_ch, par_exclude=par_excl,
             par_remove='all', test_run=False)
 
-    sc.check_out()
     # Removing extra information after creating new storage technologies
-    for (parname, t, region) in removal:
-        old = sc.par(parname, {'technology': t, 'node_loc': region})
-        if not old.empty:
-            sc.remove_par(parname, old)
-            print('- Data of "{}" in parameter "{}"'.format(t, parname),
-                  'was removed for {}'.format(region),
-                  ', after introducing new storage technologies.')
-    sc.commit('')
+    if remove_ref:
+        sc.check_out()
+        for (parname, t, region) in removal:
+            old = sc.par(parname, {'technology': t, 'node_loc': region})
+            if not old.empty:
+                sc.remove_par(parname, old)
+                print('- Data of "{}" in parameter "{}"'.format(t, parname),
+                      'was removed for {}'.format(region),
+                      ', after introducing new storage technologies.')
+        sc.commit('')
 
     print('- Storage parameterization done successfully for all technologies.')
     return all_tecs
@@ -299,16 +319,18 @@ if __name__  == ' __main__':
     # test one country: 'MESSAGE_ID', 'test_t4', 3
     # test Central Asia (5 region): 'MESSAGE_CASm', 'baseline_t12', 10
     # test global model R11: 'ENGAGE_SSP2_v4.1.2', 'baseline_t12', 13
-    # test R4: 'MESSAGE_R4', 'baseline_t12', 1
+    # test R4: 'MESSAGE_R4', 'baseline_t12', 1 (4 region)
+    # test R4: 'MESSAGE_R4', 'baseline_t12', 2 (4 region, last year 2055)
     
     # Reference scenario to clone from
-    model = 'ENGAGE_SSP2_v4.1.2'
+    model = 'MESSAGE_R4'
     scen_ref = 'baseline_t12'
-    version_ref = 13
+    version_ref = 2
     
     # File name for the Excel file of input data
-    filename = 'AddSetup_R11.xlsx'
-    setup_file = path_files + '\\' + filename
+    filename = 'setup_storage.xlsx'
+    xls_files = r'C:\Users\zakeri\Documents\Excel_files'
+    setup_file = xls_files + '\\' + filename
     
     # Naming convention for water commodity and supply technology for hydropower
     water_com = 'water'  
@@ -333,11 +355,19 @@ if __name__  == ' __main__':
     sc.check_out()
     sc.add_set('technology', water_supply_tec)
     
-    for tec in ['pump', 'inflow_dummy']:
+    xls = pd.ExcelFile(setup_file).parse()
+    tec_charger = xls.loc[xls['section'] == 'charger', 'technology'].to_list()
+    tec_discharger = xls.loc[xls['section'] == 'discharger',
+                             'technology'].to_list()
+    tec_water = [x for x in tec_charger if
+                 water_com in set(sc.par('input', {'technology': x}
+                                         )['commodity'])]
+    
+    for tec in tec_water:
         df = sc.par('output', {'technology': tec})
         df['technology'] = water_supply_tec
         df['level'] = list(set(sc.par('input', {'technology': tec,
-                                        'commodity': water_com})['level']))[0]
+                                      'commodity': water_com})['level']))[0]
         sc.add_par('output', df)
     
     # Adding relation activity for year equivalent of each storage technology
@@ -359,25 +389,7 @@ if __name__  == ' __main__':
         df_l['relation'] = rel
         sc.add_par('relation_lower_time', df_l)
         sc.add_par('relation_upper_time', df_l)
-
-    # Adding new hydropower plants to flexibility and reliability parameters
-    data_update = {'relation_activity_time': 'oper_res',
-                   'relation_total_capacity': 'res_marg'}
-    nodes = list(set(sc.par('relation_activity_time',
-                            {'technology': 'hydro_dam'})['node_loc']))
-    for parname, rel in data_update.items():
-
-        df = sc.par(parname, {'relation': rel, 'technology': 'hydro_lc',
-                              'node_rel': nodes})
-        for t in ['turbine', 'turbine_dam']:
-            df['technology'] = t
-            sc.add_par(parname, df)
-
-    # Adding upper bound on activity of dam hydro based on historical data
-    df = sc.par('bound_activity_up', {'technology': 'hydro_lc',
-                                      'node_loc': nodes})
-    df['technology'] = 'turbine_dam'
-    sc.add_par('bound_activity_up', df)
+    
     sc.commit('')
 
     # Updating mapping sets of relations
@@ -399,6 +411,7 @@ if __name__  == ' __main__':
         end = timer()
         print('Elapsed time for solving scenario:', int((end - start)/60),
               'min and', round((end - start) % 60, 2), 'sec.')
+        sc.set_as_default()
     # sc.remove_solution()
     # sc.commit('')
     # sc.discard_changes()
