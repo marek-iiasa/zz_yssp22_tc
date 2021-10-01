@@ -12,10 +12,9 @@ here in python)
 import pandas as pd
 import os
 from itertools import product
-path_files = (r'C:\Users\zakeri\Documents\Github\time_clustering' +
-              r'\scenario work\add_storage_tech')
+path_files = (r'C:\Users\zakeri\Documents\Github\Python_scripts')
 os.chdir(path_files)
-from copy_par import tec_parameters_copier
+from files.f_techno_parcopy import tec_parameters_copier
 
 
 # Initializing storage sets and parameters if needed

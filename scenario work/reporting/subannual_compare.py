@@ -44,7 +44,7 @@ reg = ['R11_LAM']
 # Years
 years = [x for x in sc.set('year') if x >= sc.firstmodelyear]
 # Sample year
-yr = [2030]
+yr = [2080]
 
 # Subannual time slices
 times = [x for x in sc.set('time') if x not in ['year']]
@@ -53,7 +53,7 @@ times = [x for x in sc.set('time') if x not in ['year']]
 sectors = ['i_spec', 'rc_spec']     # ['i_spec', 'rc_spec']
 
 # Technologies (doesn't need to relate to sectors)
-tecs = ['solar_pv_ppl'] #, 'wind_ppl']
+tecs = ['wind_ppl'] #, 'wind_ppl']
 
 # %% 4. Required utility functions
 rename = {

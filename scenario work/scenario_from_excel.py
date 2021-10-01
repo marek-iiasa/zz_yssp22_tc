@@ -14,7 +14,7 @@ model = "MESSAGE_CAS"
 scenario = "baseline"
 
 # Path to the excel file
-xls_path = r'C:\Users\...\Github\time_clustering\scenario work\data'  #update this path to yours
+xls_path = r'C:\Users\zakeri\Documents\Github\time_clustering\scenario work\data'  #update this path to yours
 
 # Excel file name
 file_name = 'MESSAGE_CASm__baseline_t12__v8.xlsx'
