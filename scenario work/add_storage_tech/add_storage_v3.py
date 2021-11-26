@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This script does the following:
+This script does the following (includes modes of operation for storage):
     1. initializes sets and parameters needed for the modeling of storage
     2. adds storage representation (pumped hydro or reservoir hydro, etc.) to
     an existing model (clones into a new model)
@@ -22,28 +22,43 @@ from copy_par import tec_parameters_copier
 def init_storage(sc):
     sc.check_out()
     # 1) Adding sets
+    idx = ['node', 'technology', 'mode', 'level', 'commodity', 'year', 'time']
     dict_set = {'storage_tec': None,
                 'level_storage': None,
-                'map_tec_storage': ['node', 'technology', 'storage_tec',
+                'map_tec_storage': ['node', 'technology', 'mode',
+                                    'storage_tec', 'mode',
                                     'level', 'commodity'],
+                'is_relation_lower_time': ['relation', 'node', 'year', 'time'],
+                'is_relation_upper_time': ['relation', 'node', 'year', 'time'],
                  }
     for item, idxs in dict_set.items():
         try:
             sc.init_set(item, idx_sets=idxs)
         except:
-            pass
+            if item == 'map_tec_storage':
+                sc.remove_set(item)
+                sc.init_set(item, idx_sets=idxs,
+                            idx_names=['node', 'technology', 'mode',
+                                       'storage_tec', 'mode_storage',
+                                       'level', 'commodity'])
+            else:
+                pass
     # 2) Adding parameters
-    idx_par = ['node', 'technology', 'level', 'commodity', 'year', 'time']
+    
     dict_par = {'time_order': ['lvl_temporal', 'time'],
-                'storage_self_discharge': idx_par,
-                'storage_initial': idx_par,
+                'storage_self_discharge': idx,
+                'storage_initial': idx,
                  }
 
     for item, idxs in dict_par.items():
         try:
             sc.init_par(item, idx_sets=idxs)
         except:
-            pass
+            if "storage" in item:
+                sc.remove_par(item)
+                sc.init_par(item, idx_sets=idxs)
+            else:
+                pass
 
     sc.commit('')
 
@@ -57,14 +72,15 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
         init_storage(sc)
 
     # 2) Adding required sets and parameters for storage technologies
-    df = (pd.ExcelFile(setup_file)).parse('storage')
+    df = pd.ExcelFile(setup_file, engine="openpyxl").parse('storage')
     df = df.loc[df['active'] == 'yes']
 
     sc.check_out()
 
-    # 2.1) Adding storage technologies
+    # 2.1) Adding storage technologies and modes
     all_tecs = df['technology'].dropna().tolist()
     sc.add_set('technology', all_tecs)
+    sc.add_set('mode', list(set(df['mode'].dropna())))
 
     # 2.2) Adding missing commodities and levels
     for par, column in product(['input', 'output'], ['commodity', 'level']):
@@ -91,7 +107,9 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
         tec = d_stor['technology'][i]
         tecs = df.loc[df['storage_tec'] == tec]['technology'].tolist()
         for t, node in product(tecs, nodes):
-            sc.add_set('map_tec_storage', [node, t, tec,
+            mode_t = df.loc[df['technology'] == t, 'mode'].item()
+            sc.add_set('map_tec_storage', [node, t, mode_t, tec,
+                                           d_stor['mode'][i],
                                            d_stor['input_level'][i],
                                            d_stor['input_commodity'][i]])
     print('- Storage sets and mappings added.')
@@ -123,7 +141,13 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
     df = df.set_index('technology')
     removal = []
     for tec in df.index:
+        # Mode
+        mode_t = df.loc[tec, 'mode']
+        
+        # Refrence technology
         tec_ref = df.loc[tec, 'tec_from']
+        
+        # Nodes
         if df.loc[tec, 'node_loc'] == 'all':
             node_exclude = d_stor['node_exclude'][i].split('/')
             nodes = [x for x in sc.set('node') if
@@ -157,6 +181,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
             df_new[node_col] = df_new['node_loc']
             
             df_new['technology'] = tec
+            df_new['mode'] = mode_t
             com_list = df.loc[tec, par + '_commodity']
             if not pd.isna(com_list):
                 for num, com in enumerate(com_list.split('/')):
@@ -179,6 +204,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
                 d['technology'] = tec
                 d['year'] = [i[0] for i in d.index]
                 d['time'] = [i[1] for i in d.index]
+                d['mode'] = df.loc[tec, 'mode']
                 d['level'] = df.loc[tec, 'input_level']
                 d['commodity'] = df.loc[tec, 'input_commodity']
 
@@ -206,6 +232,8 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
                 
                 # Adding new data
                 hist['technology'] = tec
+                if "activity" in parname:
+                    hist["mode"] = mode_t
                 sc.add_par(parname, hist)
                 removal = removal + [(parname, tec_hist, nodes)]
 
@@ -217,6 +245,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
             
             # Adding new data
             rel['technology'] = tec
+            rel["mode"] = mode_t
             sc.add_par(parname, rel)
             removal = removal + [(parname, tec_rel, nodes)]
 
@@ -237,8 +266,10 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
             elif excl.split(':')[0] == 'multiply':
                 d['value'] *= float(excl.split(':')[1])
                 
-            # Renaming technology and node names
+            # Renaming technology, mode, and node names
             d['technology'] = tec
+            if "mode" in sc.idx_sets(parname):
+                d["mode"] = mode_t
             for node_r, node_n in zip(nodes_ref, nodes):
                         d = d.replace({node_r: node_n})
             
@@ -323,13 +354,13 @@ if __name__  == ' __main__':
     # test R4: 'MESSAGE_R4', 'baseline_t12', 2 (4 region, last year 2055)
     
     # Reference scenario to clone from
-    model = 'MESSAGE_R4'
-    scen_ref = 'baseline_t12'
-    version_ref = 2
+    model = 'MESSAGE_ID'
+    scen_ref = 'test_t4'
+    version_ref = 3
     
     # File name for the Excel file of input data
     filename = 'setup_storage.xlsx'
-    xls_files = r'C:\Users\zakeri\Documents\Excel_files'
+    xls_files = path_files
     setup_file = xls_files + '\\' + filename
     
     # Naming convention for water commodity and supply technology for hydropower
@@ -347,7 +378,7 @@ if __name__  == ' __main__':
     # Parameterization of storage
     lvl_temporal = [x for x in sc.set('lvl_temporal') if x not in ['year']][0]
     # sc.discard_changes()
-    tecs = add_storage(sc, setup_file, lvl_temporal, init_items=False)
+    tecs = add_storage(sc, setup_file, lvl_temporal, init_items=True)
     
     # Adding an unlimited source of water (this can be revisited or renamed)
     # For example, in the global model, there is water extraction level
