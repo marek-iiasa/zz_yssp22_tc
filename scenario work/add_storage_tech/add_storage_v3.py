@@ -96,24 +96,6 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
     storage_lvls = d_stor['input_level'].tolist()
     sc.add_set('level_storage', storage_lvls)
 
-    # 2.4) Adding mapping of charger-discharger technologies to their storage
-    for i in d_stor.index:
-        if d_stor['node_loc'][i] != 'all':
-            nodes = d_stor['node_loc'][i].split('/')
-        else:
-            node_exclude = d_stor['node_exclude'][i].split('/')
-            nodes = [x for x in sc.set('node') if
-                     x not in ['World'] + node_exclude]
-        tec = d_stor['technology'][i]
-        tecs = df.loc[df['storage_tec'] == tec]['technology'].tolist()
-        for t, node in product(tecs, nodes):
-            mode_t = df.loc[df['technology'] == t, 'mode'].item()
-            sc.add_set('map_tec_storage', [node, t, mode_t, tec,
-                                           d_stor['mode'][i],
-                                           d_stor['input_level'][i],
-                                           d_stor['input_commodity'][i]])
-    print('- Storage sets and mappings added.')
-
     # 3) Parameter "time_order" for the order of time slices in each level
     parname = 'time_order'
     df2 = pd.DataFrame(index=[0], columns=['lvl_temporal', 'time',
@@ -137,27 +119,36 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
     sc.commit('setup added')
 
     # 4) Parametrization of storage technologies
-    model_yrs = [int(x) for x in sc.set('year') if int(x) >= sc.firstmodelyear]
-    df = df.set_index('technology')
+    try:
+        model_yrs = [int(x) for x in sc.set('year') if int(x) >= sc.firstmodelyear]
+    except:
+        model_yrs = sc.set('year').to_list()
+    df = df.set_index(['technology', 'mode'])
     removal = []
-    for tec in df.index:
-        # Mode
-        mode_t = df.loc[tec, 'mode']
-        
+    for i in df.index:
         # Refrence technology
-        tec_ref = df.loc[tec, 'tec_from']
+        tec_ref = df.loc[i, 'tec_from']
         
         # Nodes
-        if df.loc[tec, 'node_loc'] == 'all':
-            node_exclude = d_stor['node_exclude'][i].split('/')
+        if df.loc[i, 'node_loc'] == 'all':
+            node_exclude = df.loc[i, 'node_exclude'].split('/')
             nodes = [x for x in sc.set('node') if
                      x not in ['World'] + node_exclude]
             nodes_ref = nodes
         else:
-            nodes = df.loc[tec, 'node_loc'].split('/')
-            nodes_ref = df.loc[tec, 'node_from'].split('/')
-
+            nodes = df.loc[i, 'node_loc'].split('/')
+            nodes_ref = df.loc[i, 'node_from'].split('/')
+        
         sc.check_out()
+        # 2.4) Adding mapping of charger-discharger technologies to their storage
+        if not df.loc[i, 'storage_tec'] == "yes":
+            storage_tecs = [x.split(",") for x in df.loc[i, 'storage_tec'].split("/")]
+            for (tec, mode_t), node in product(storage_tecs, nodes):
+                sc.add_set('map_tec_storage', [node, i[0], i[1], tec,
+                                               mode_t,
+                                               df.loc[(tec, mode_t), 'input_level'],
+                                               df.loc[(tec, mode_t), 'input_commodity']])
+        print('- Storage sets and mappings added.')
         # 4.1) Adding input and output of storage reservoir technology
         for par in ['input', 'output']:
             df_ref = sc.par(par, {'technology': tec_ref, 'node_loc': nodes})
@@ -180,72 +171,72 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
                         'node' in x and x != 'node_loc'][0]
             df_new[node_col] = df_new['node_loc']
             
-            df_new['technology'] = tec
-            df_new['mode'] = mode_t
-            com_list = df.loc[tec, par + '_commodity']
+            df_new['technology'] = i[0]
+            df_new['mode'] = i[1]
+            com_list = df.loc[i, par + '_commodity']
             if not pd.isna(com_list):
                 for num, com in enumerate(com_list.split('/')):
-                    lvl = df.loc[tec, par + '_level'].split('/')[num]
+                    lvl = df.loc[i, par + '_level'].split('/')[num]
                     df_new['commodity'] = com
                     df_new['level'] = lvl
-                    df_new['value'] = float(str(df.loc[tec, par + '_value']
+                    df_new['value'] = float(str(df.loc[i, par + '_value']
                                                 ).split('/')[num])
                     sc.add_par(par, df_new)
         print('- Storage "input" and "output" parameters',
-              'configured for "{}".'.format(tec))
+              'configured for "{}".'.format(i[0]))
 
         # 4.2) Adding storage reservoir parameters
-        if tec in storage_tecs:
+        if i[0] in storage_tecs:
             par_list = ['storage_self_discharge', 'storage_initial']
             for parname in par_list:
                 cols = sc.idx_names(parname) + ['unit', 'value']
                 d = pd.DataFrame(index=product(model_yrs, times),
                                  columns=cols)
-                d['technology'] = tec
-                d['year'] = [i[0] for i in d.index]
-                d['time'] = [i[1] for i in d.index]
-                d['mode'] = df.loc[tec, 'mode']
-                d['level'] = df.loc[tec, 'input_level']
-                d['commodity'] = df.loc[tec, 'input_commodity']
+                d['technology'] = i[0]
+                d['year'] = [y[0] for y in d.index]
+                d['time'] = [y[1] for y in d.index]
+                d['mode'] = i[1]
+                d['level'] = df.loc[i, 'input_level']
+                d['commodity'] = df.loc[i, 'input_commodity']
 
                 if parname == 'storage_initial':
                     slicer = [x for x in d.index if x[1] == times[0]]
                     d = d.loc[slicer, :]
-                    d['value'] = df.loc[tec, parname]
+                    d['value'] = df.loc[i, parname]
                     d['unit'] = 'GWa'
                 else:
-                    d['value'] = df.loc[tec, parname]
+                    d['value'] = df.loc[i, parname]
                     d['unit'] = '-'
 
                 for node in nodes:
                     d['node'] = node
                     d = d.reset_index(drop=True)
                     sc.add_par(parname, d)
-            print('- Storage reservoir parameters added for {}'.format(tec))
+            print('- Storage reservoir parameters added for {}'.format(i[0]))
 
         # 4.3.1) Transferring historical data if needed
-        if not pd.isna(df.loc[tec, 'historical']):
-            tec_hist = df.loc[tec, 'historical']
+        if not pd.isna(df.loc[i, 'historical']):
+            tec_hist = df.loc[i, 'historical']
             for parname in ['historical_activity', 'historical_new_capacity']:
                 hist = sc.par(parname, {'technology': tec_hist,
                                         'node_loc': nodes})
                 
                 # Adding new data
-                hist['technology'] = tec
+                hist['technology'] = i[0]
                 if "activity" in parname:
-                    hist["mode"] = mode_t
+                    hist["mode"] = i[1]
                 sc.add_par(parname, hist)
                 removal = removal + [(parname, tec_hist, nodes)]
 
         # 4.3.2) Transferring relation activity (Notice: relation capacity?)
-        if not pd.isna(df.loc[tec, 'relation']):
-            tec_rel = df.loc[tec, 'relation']
+        if not pd.isna(df.loc[i, 'relation']):
+            tec_rel = df.loc[i, 'relation']
             parname = 'relation_activity_time'
             rel = sc.par(parname, {'technology': tec_rel, 'node_loc': nodes})
             
             # Adding new data
-            rel['technology'] = tec
-            rel["mode"] = mode_t
+            rel['technology'] = i[0]
+            rel["mode"] = i[1]
             sc.add_par(parname, rel)
             removal = removal + [(parname, tec_rel, nodes)]
 
@@ -260,23 +251,23 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
             d = sc.par(parname, {node_col: nodes_ref, 'technology': tec_ref})
             
             # Checking if the value is directly from Excel or as a multiplier
-            excl = df.loc[tec, parname]
+            excl = df.loc[i, parname]
             if excl.split(':')[0] == 'value':
                 d['value'] = float(excl.split(':')[1])
             elif excl.split(':')[0] == 'multiply':
                 d['value'] *= float(excl.split(':')[1])
                 
             # Renaming technology, mode, and node names
-            d['technology'] = tec
+            d['technology'] = i[0]
             if "mode" in sc.idx_sets(parname):
-                d["mode"] = mode_t
+                d["mode"] = i[1]
             for node_r, node_n in zip(nodes_ref, nodes):
                         d = d.replace({node_r: node_n})
             
             # Adding the data back to the scenario
             sc.add_par(parname, d)
             
-        print('- Data of "{}" copied to "{}"'.format(tec_ref, tec),
+        print('- Data of "{}" copied to "{}"'.format(tec_ref, i[0]),
               'for parameters {},'.format(pars), 
               'with updated values from Excel.')
         sc.commit('')
@@ -287,8 +278,10 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
         par_excl = par_excl + pars + ['input', 'output', 'emission_factor']
         dict_ch = {}
         
+        # TODO: Here parameters with the mode may be overwritten if two modes
+        # Solution: specify them explicitly in Excel input
         d1, d2 = tec_parameters_copier(
-            sc, sc, tec_ref, tec, nodes_ref, nodes, add_tec=False,
+            sc, sc, tec_ref, i[0], nodes_ref, nodes, add_tec=False,
             dict_change=dict_ch, par_exclude=par_excl,
             par_remove='all', test_run=False)
 
@@ -386,7 +379,7 @@ if __name__  == ' __main__':
     sc.check_out()
     sc.add_set('technology', water_supply_tec)
     
-    xls = pd.ExcelFile(setup_file).parse()
+    xls = pd.ExcelFile(setup_file, engine="openpyxl").parse()
     tec_charger = xls.loc[xls['section'] == 'charger', 'technology'].to_list()
     tec_discharger = xls.loc[xls['section'] == 'discharger',
                              'technology'].to_list()
