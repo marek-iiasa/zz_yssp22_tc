@@ -617,7 +617,52 @@ def init_par_time(sc, par_list=[]):
     sc.commit("")
 
 
-# 1.14) Updating reserve margin
+# 1.14) Initializing storage sets and parameters if needed
+def init_storage(sc):
+    sc.check_out()
+    # 1) Adding sets
+    idx = ['node', 'technology', 'mode', 'level', 'commodity', 'year', 'time']
+    dict_set = {'storage_tec': None,
+                'level_storage': None,
+                'map_tec_storage': ['node', 'technology', 'mode',
+                                    'storage_tec', 'mode',
+                                    'level', 'commodity'],
+                'is_relation_lower_time': ['relation', 'node', 'year', 'time'],
+                'is_relation_upper_time': ['relation', 'node', 'year', 'time'],
+                 }
+    for item, idxs in dict_set.items():
+        try:
+            sc.init_set(item, idx_sets=idxs)
+        except:
+            if item == 'map_tec_storage':
+                sc.remove_set(item)
+                sc.init_set(item, idx_sets=idxs,
+                            idx_names=['node', 'technology', 'mode',
+                                       'storage_tec', 'mode_storage',
+                                       'level', 'commodity'])
+            else:
+                pass
+    # 2) Adding parameters
+    
+    dict_par = {'time_order': ['lvl_temporal', 'time'],
+                'storage_self_discharge': idx,
+                'storage_initial': idx,
+                 }
+
+    for item, idxs in dict_par.items():
+        try:
+            sc.init_par(item, idx_sets=idxs)
+        except:
+            if "storage" in item:
+                sc.remove_par(item)
+                sc.init_par(item, idx_sets=idxs)
+            else:
+                pass
+
+    sc.commit('')
+
+
+# 1.15) Updating reserve margin
 def update_res_marg(sc, path_xls, sc_ref=[], # based on a reference scenario
                     parname='relation_activity_time',
                     reserve_margin=0.2,  # on top of peak load for reserves
@@ -707,7 +752,7 @@ def update_res_marg(sc, path_xls, sc_ref=[], # based on a reference scenario
     print('- Reserve margin updated based on the new peak demand data.')
 
 
-# 1.15) Copying historical data to "ref" parameters
+# 1.16) Copying historical data to "ref" parameters
 def historical_to_ref(sc, year_list=[], sc_ref=None, regions=all,
                       remove_ref=True):
 
@@ -778,6 +823,7 @@ if __name__ == "__main__":
     set_update = True  # if True, adds time slices and set adjustments
     last_year = None  # either int (year) or None (removes extra years)
     node_exlude = ["World"]  # nodes to be excluded from the timeslicing
+    initialize_storage = True   # initializing sets and parameters of storage
 
     # 2) Adjustment related to general cleanup
     vre_cleanup = False  # do it if not yet, cleanup VRE and new implementation
@@ -827,12 +873,9 @@ if __name__ == "__main__":
     if sc.has_solution():
         sc.remove_solution()
 
-    # try:
-    #     sc.par("storage_initial")
-    # except:
-    #     addNewParameter(sc, path_xls, remove_par=True)
-
-    nodes = [x for x in sc.set("node") if x not in ["World"] + node_exlude]
+    # Initializing storage (needed for branch "time_parameters)
+    if initialize_storage:
+        init_storage(sc)
 
     # 2.2) Loading Excel data (time series)
     xls = pd.ExcelFile("//".join([path_xls, xls_file]))
@@ -840,6 +883,7 @@ if __name__ == "__main__":
     # -----------------------------------------------------------------------------
     # 3) Updating sets related to time
     # Adding subannual time slices to the relevant sets
+    nodes = [x for x in sc.set("node") if x not in ["World"] + node_exlude]
     duration, df_time, dict_xls = xls_to_df(xls, n_time, nodes)
     times = df_time["time"].tolist()
 
