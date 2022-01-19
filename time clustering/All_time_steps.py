@@ -26,13 +26,13 @@ now = datetime.datetime.now()
 # Select the op value according to the scenario you want to analyze from 1 to 3
 
 # select the number os hourly time slices = 24, 12, 6, 4, 3, 2, 1 
-hourly_time_slices_in_a_day = 6
+hourly_time_slices_in_a_day = 1
 
 # default = 1. If 2, the algorithm will look for a representative week with 4 seasons, 2 days and 6 hours, i.e. 48 time slices.
-daily_time_slices_in_a_week = 1 
+daily_time_slices_in_a_week = 2
 
 # True = time slices will be divided into months. False = time slices will be divided into seasons
-monthly = True
+monthly = False
 
 # if monthly = True, select the number of monthly time slices = 12, 6, 4, 3, 2, 1 
 # 12 = JAN, FEB, MAR, APR, MAY, JUN, JUL, AUG, SET, OCT, NOV, DEC
@@ -41,13 +41,13 @@ monthly = True
 # 3  = JAN-APR, MAY-AUG, SET-DEC
 # 2  = JAN-JUN, JUL-DEC
 # 1  = JAN-DEC
-monthly_time_slices_in_a_year = 12
+monthly_time_slices_in_a_year = 4
 
 # if monthly = False, select the number of seasons time slices = 4, 2, 1 
 # 4 = Winter, Spring, Summer, Autumn = 21/DEC-19/MAR, 20/MAR-19/JUN, 20/JUN-21/SEP, 22/SEP-20/DEC
 # 2 = Winter-Spring, Summer, Autumn = 21/DEC-19/JUN, 20/JUN-20/DEC
 # 1 = Winter-Autumn = 21/DEC-20/DEC
-seasonal_time_slices_in_a_year = 0
+seasonal_time_slices_in_a_year = 4
 
 # Weights selection
 #Define the weights for each kind of energy source (sum must be equal to 1): 
@@ -75,8 +75,8 @@ if r_or_c == True:
 
     # Select the number of the regions that needs to be analysed with the numbers below:
     # region => NAM = 0, LAC = 1, WEU = 2, EEU = 3, FSU = 4, AFR = 5, MEA = 6, SAS = 7, CPA = 8, PAS = 9, PAO = 10
-    regions_or_countries = ['NAM','EEU','CPA']
-    selected_regions_or_countries = [0,3,8] 
+    regions_or_countries = ['CPA']
+    selected_regions_or_countries = [8] 
     
 else:
     input_data = pd.read_excel('individual countries.xlsx')
@@ -94,8 +94,8 @@ else:
     selected_regions_or_countries = [20]    
     
 if daily_time_slices_in_a_week == 2:
-    from Time_steps_clustering_48 import algorithm as t48
-    t48(input_data,regions_or_countries,selected_regions_or_countries,solar_weight,wind_weight,hydro_weight,demand_weight,mid_night,path)
+    from Time_steps_clustering_4_seasons_2_weeks_x_hours import algorithm as t48
+    t48(input_data,regions_or_countries,selected_regions_or_countries,solar_weight,wind_weight,hydro_weight,demand_weight,mid_night,path,hourly_time_slices_in_a_day)
     x = 0
 
 else:
