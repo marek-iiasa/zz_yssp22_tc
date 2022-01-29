@@ -27,7 +27,7 @@ def init_storage(sc):
                 'level_storage': None,
                 'map_tec_storage': ['node', 'technology', 'mode',
                                     'storage_tec', 'mode',
-                                    'level', 'commodity'],
+                                    'level', 'commodity', 'lvl_temporal'],
                 'is_relation_lower_time': ['relation', 'node', 'year', 'time'],
                 'is_relation_upper_time': ['relation', 'node', 'year', 'time'],
                  }
@@ -40,7 +40,7 @@ def init_storage(sc):
                 sc.init_set(item, idx_sets=idxs,
                             idx_names=['node', 'technology', 'mode',
                                        'storage_tec', 'mode_storage',
-                                       'level', 'commodity'])
+                                       'level', 'commodity', 'lvl_temporal'])
             else:
                 pass
     # 2) Adding parameters
@@ -86,7 +86,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
     for par, column in product(['input', 'output'], ['commodity', 'level']):
         item_list = df[par + '_' + column].dropna().tolist()
         for item in item_list:
-            sc.add_set(column,  item.split('/'))
+            sc.add_set(column, item.split('/'))
 
     # 2.3) Adding storage to set technology and level_storage
     d_stor = df.loc[df['storage_tec'] == 'yes']
@@ -96,6 +96,25 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
     storage_lvls = d_stor['input_level'].tolist()
     sc.add_set('level_storage', storage_lvls)
 
+    # 2.4) Adding mapping of charger-discharger technologies to their storage
+    for i in d_stor.index:
+        if d_stor['node_loc'][i] != 'all':
+            nodes = d_stor['node_loc'][i].split('/')
+        else:
+            node_exclude = d_stor['node_exclude'][i].split('/')
+            nodes = [x for x in sc.set('node') if
+                     x not in ['World'] + node_exclude]
+        tec = d_stor['technology'][i]
+        tecs = df.loc[df['storage_tec'] == tec]['technology'].tolist()
+        for t, node in product(tecs, nodes):
+            mode_t = df.loc[df['technology'] == t, 'mode'].item()
+            sc.add_set('map_tec_storage', [node, t, mode_t, tec,
+                                           d_stor['mode'][i],
+                                           d_stor['input_level'][i],
+                                           d_stor['input_commodity'][i],
+                                           d_stor['lvl_temporal'][i],
+                                           ])
+    print('- Storage sets and mappings added.')
     # 3) Parameter "time_order" for the order of time slices in each level
     parname = 'time_order'
     df2 = pd.DataFrame(index=[0], columns=['lvl_temporal', 'time',
@@ -140,15 +159,6 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
             nodes_ref = df.loc[i, 'node_from'].split('/')
         
         sc.check_out()
-        # 2.4) Adding mapping of charger-discharger technologies to their storage
-        if not df.loc[i, 'storage_tec'] == "yes":
-            storage_tecs = [x.split(",") for x in df.loc[i, 'storage_tec'].split("/")]
-            for (tec, mode_t), node in product(storage_tecs, nodes):
-                sc.add_set('map_tec_storage', [node, i[0], i[1], tec,
-                                               mode_t,
-                                               df.loc[(tec, mode_t), 'input_level'],
-                                               df.loc[(tec, mode_t), 'input_commodity']])
-        print('- Storage sets and mappings added.')
         # 4.1) Adding input and output of storage reservoir technology
         for par in ['input', 'output']:
             df_ref = sc.par(par, {'technology': tec_ref, 'node_loc': nodes})
@@ -347,9 +357,9 @@ if __name__  == ' __main__':
     # test R4: 'MESSAGE_R4', 'baseline_t12', 2 (4 region, last year 2055)
     
     # Reference scenario to clone from
-    model = 'MESSAGE_ID'
-    scen_ref = 'test_t4'
-    version_ref = 3
+    model = 'MESSAGE_R4'
+    scen_ref = 'baseline_t12'
+    version_ref = 2
     
     # File name for the Excel file of input data
     filename = 'setup_storage.xlsx'
