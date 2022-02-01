@@ -626,7 +626,7 @@ def init_storage(sc):
                 'level_storage': None,
                 'map_tec_storage': ['node', 'technology', 'mode',
                                     'storage_tec', 'mode',
-                                    'level', 'commodity'],
+                                    'level', 'commodity', 'lvl_temporal'],
                 'is_relation_lower_time': ['relation', 'node', 'year', 'time'],
                 'is_relation_upper_time': ['relation', 'node', 'year', 'time'],
                  }
@@ -639,7 +639,7 @@ def init_storage(sc):
                 sc.init_set(item, idx_sets=idxs,
                             idx_names=['node', 'technology', 'mode',
                                        'storage_tec', 'mode_storage',
-                                       'level', 'commodity'])
+                                       'level', 'commodity', 'lvl_temporal'])
             else:
                 pass
     # 2) Adding parameters
