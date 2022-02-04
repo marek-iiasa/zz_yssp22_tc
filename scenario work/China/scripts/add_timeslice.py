@@ -829,10 +829,10 @@ if __name__ == "__main__":
     n_time = 48     # number of time slices <= file ID
     file_id = "48"
 
-    path_files = r"C:\Users\zakeri\Documents\Github\time_clustering\scenario_work"
-    os.chdir(path_files)
+    path_files = r"C:\Users\zakeri\Documents\Github\time_clustering\scenario work"
+    os.chdir(path_files + "\\add_storage_tech")
     
-    from add_storage_tech.add_storage_v3 import add_storage
+    from add_storage_v3 import add_storage
     path_xls = path_files + "\\China\\data"
     xls_file = "input_data_" + file_id + "_" + model_family + ".xlsx"
 
@@ -1281,3 +1281,20 @@ if __name__ == "__main__":
     )
 
 # %% Add storage technologies
+    # Setup file for storage
+    filename = 'setup_storage_CHN.xlsx'
+    setup_file = path_xls + '\\' + filename
+    
+    # sc = message_ix.Scenario(mp, model_ref, scenario_new, 30)
+    
+    # Adding storage setup
+    sc2 = sc.clone(scenario=sc.scenario + "_stor", keep_solution=False)
+    tecs = add_storage(sc2, setup_file, init_items=True)
+
+    # Solving
+    case2 = sc2.model + "__" + sc2.scenario + "__v" + str(sc2.version)
+    print(
+        'Solving scenario "{}", started at {}, please wait...'
+        "!".format(casename, datetime.now().strftime("%H:%M:%S"))
+    )
+    sc2.solve(case=case2, solve_options={"lpmethod": "4"})
