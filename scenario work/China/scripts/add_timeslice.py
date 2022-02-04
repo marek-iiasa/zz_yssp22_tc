@@ -1295,6 +1295,6 @@ if __name__ == "__main__":
     case2 = sc2.model + "__" + sc2.scenario + "__v" + str(sc2.version)
     print(
         'Solving scenario "{}", started at {}, please wait...'
-        "!".format(casename, datetime.now().strftime("%H:%M:%S"))
+        "!".format(case2, datetime.now().strftime("%H:%M:%S"))
     )
     sc2.solve(case=case2, solve_options={"lpmethod": "4"})
