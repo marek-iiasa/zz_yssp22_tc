@@ -10,6 +10,7 @@ import pandas as pd
 # Main function
 def tec_parameters_copier(
         sc_ref, sc_new, tec_ref, tec_new, node_ref='all', node_new='all',
+        mode_ref=None, mode_new=None,
         add_tec=False, par_copy='all', dict_change={}, par_exclude=[],
         par_remove=[], test_run=True):
 
@@ -50,6 +51,8 @@ def tec_parameters_copier(
         else:
             df_par1 = sc_ref.par(parname, {'technology': tec_ref,
                                            node_col: node_ref})
+        if "mode" in sc_ref.idx_sets(parname) and mode_ref:
+            df_par1 = df_par1.loc[df_par1["mode"] == mode_ref].copy()
         for year_col in year_cols:
             df_par1 = df_par1.loc[df_par1[year_col].isin(year_new)].copy()
 
@@ -94,6 +97,11 @@ def tec_parameters_copier(
                 
                 # Renaming technology
                 df_copy['technology'] = tec_new
+                
+                # Renaming mode
+                if mode_new and "mode" in sc_new.idx_sets(parname):
+                    df_copy['mode'] = mode_new
+                    
             else:
                 df_copy = pd.DataFrame()
 
