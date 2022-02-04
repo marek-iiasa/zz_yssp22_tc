@@ -64,8 +64,7 @@ def init_storage(sc):
 
 
 # A function for adding storage technologies to an existing scenario
-def add_storage(sc, setup_file, lvl_temporal, init_items=False,
-                remove_ref=False):
+def add_storage(sc, setup_file, init_items=False, remove_ref=False):
 
     # 1) Initialization if needed
     if init_items:
@@ -81,6 +80,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
     all_tecs = df['technology'].dropna().tolist()
     sc.add_set('technology', all_tecs)
     sc.add_set('mode', list(set(df['mode'].dropna())))
+    df = df.set_index(['technology', 'mode']).sort_index()
 
     # 2.2) Adding missing commodities and levels
     for par, column in product(['input', 'output'], ['commodity', 'level']):
@@ -90,7 +90,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
 
     # 2.3) Adding storage to set technology and level_storage
     d_stor = df.loc[df['storage_tec'] == 'yes']
-    storage_tecs = d_stor['technology'].tolist()
+    storage_tecs = [x[0] for x in d_stor.index]
     sc.add_set('storage_tec', storage_tecs)
 
     storage_lvls = d_stor['input_level'].tolist()
@@ -104,46 +104,43 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
             node_exclude = d_stor['node_exclude'][i].split('/')
             nodes = [x for x in sc.set('node') if
                      x not in ['World'] + node_exclude]
-        tec = d_stor['technology'][i]
-        tecs = df.loc[df['storage_tec'] == tec]['technology'].tolist()
-        for t, node in product(tecs, nodes):
-            mode_t = df.loc[df['technology'] == t, 'mode'].item()
-            sc.add_set('map_tec_storage', [node, t, mode_t, tec,
-                                           d_stor['mode'][i],
+        tec = i[0]
+        mode = i[1]
+        tecs = df.loc[df['storage_tec'] == tec + "," + mode].index
+        for (t, mode_t), node in product(tecs, nodes):
+            sc.add_set('map_tec_storage', [node, t, mode_t, tec, mode,
                                            d_stor['input_level'][i],
                                            d_stor['input_commodity'][i],
                                            d_stor['lvl_temporal'][i],
                                            ])
-    print('- Storage sets and mappings added.')
-    # 3) Parameter "time_order" for the order of time slices in each level
-    parname = 'time_order'
-    df2 = pd.DataFrame(index=[0], columns=['lvl_temporal', 'time',
-                                          'value', 'unit'])
-    if lvl_temporal:
-        timap = sc.set('map_temporal_hierarchy')
-        times = timap.loc[timap['lvl_temporal'] == lvl_temporal,
+    
+        # 3) Parameter "time_order" for the order of time slices in each level
+        parname = 'time_order'
+        df2 = pd.DataFrame(index=[0], columns=['lvl_temporal', 'time',
+                                              'value', 'unit'])
+        ti_map = sc.set('map_temporal_hierarchy')
+        times = ti_map.loc[ti_map['lvl_temporal'] == d_stor['lvl_temporal'][i],
                           'time'].tolist()
-    else:
-        times = ['year']
-        print('>Warning<: scenario has no time steps at the specified level!')
-
-    for ti in range(len(times)):
-        d = df2.copy()
-        d['time'] = times[ti]
-        d['value'] = ti + 1
-        d['lvl_temporal'] = lvl_temporal
-        d['unit'] = '-'
-        sc.add_par(parname, d)
+        # Adding order of times
+        for ti in range(len(times)):
+            d = df2.copy()
+            d['time'] = times[ti]
+            d['value'] = ti + 1
+            d['lvl_temporal'] = d_stor['lvl_temporal'][i]
+            d['unit'] = '-'
+            sc.add_par(parname, d)
 
     sc.commit('setup added')
+    print('- Storage sets and mappings added.')
 
     # 4) Parametrization of storage technologies
     try:
         model_yrs = [int(x) for x in sc.set('year') if int(x) >= sc.firstmodelyear]
     except:
         model_yrs = sc.set('year').to_list()
-    df = df.set_index(['technology', 'mode'])
+    
     removal = []
+    df = df[~df.index.duplicated(keep='first')].copy()
     for i in df.index:
         # Refrence technology
         tec_ref = df.loc[i, 'tec_from']
@@ -193,7 +190,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
                                                 ).split('/')[num])
                     sc.add_par(par, df_new)
         print('- Storage "input" and "output" parameters',
-              'configured for "{}".'.format(i[0]))
+              'configured for "{}".'.format(i))
 
         # 4.2) Adding storage reservoir parameters
         if i[0] in storage_tecs:
@@ -222,7 +219,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
                     d['node'] = node
                     d = d.reset_index(drop=True)
                     sc.add_par(parname, d)
-            print('- Storage reservoir parameters added for {}'.format(i[0]))
+            print('- Storage reservoir parameters added for {}'.format(i))
 
         # 4.3.1) Transferring historical data if needed
         if not pd.isna(df.loc[i, 'historical']):
@@ -292,7 +289,7 @@ def add_storage(sc, setup_file, lvl_temporal, init_items=False,
         # Solution: specify them explicitly in Excel input
         d1, d2 = tec_parameters_copier(
             sc, sc, tec_ref, i[0], nodes_ref, nodes, add_tec=False,
-            dict_change=dict_ch, par_exclude=par_excl,
+            dict_change=dict_ch, par_exclude=par_excl, mode_new=i[1],
             par_remove='all', test_run=False)
 
     # Removing extra information after creating new storage technologies
