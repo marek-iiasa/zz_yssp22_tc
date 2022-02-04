@@ -22,11 +22,10 @@ from itertools import product
 from datetime import datetime
 from timeit import default_timer as timer
 
-path_files = r"C:\Users\zakeri\Documents\Github\python_scripts"
-os.chdir(path_files)
-
 # 1.1) A function for reading input data from excel and formatting as needed
-def xls_to_df(xls, n_time, nodes, exclude_sheets=["peak_demand"]):
+def xls_to_df(xls, n_time, nodes,
+              exclude_sheets=["peak_demand", "map_temporal_hierarchy"],
+              additional_hierarchy=False):
     # Converting time series based on the number of time slices
     df_time = xls.parse("time_steps", converters={"time": str})
     df_time = df_time.loc[df_time["lvl_temporal"] != "Sum"]
@@ -68,6 +67,23 @@ def xls_to_df(xls, n_time, nodes, exclude_sheets=["peak_demand"]):
     duration = [round(x, 8) for x in dur.groupby(dur.index // length).sum()]
     df_time = df_time.loc[0: n_time - 1, :]
     df_time["duration_time"] = duration
+    df_time = df_time[['lvl_temporal', 'time_parent', 'time', 'duration_time']]
+    
+    # Adding additional hierarchy if needed
+    if additional_hierarchy:
+        df = xls.parse("map_temporal_hierarchy")
+        df = df.loc[~df["lvl_temporal"].isin(set(df_time["lvl_temporal"]))].copy()
+        new_times = [x for x in set(df["time"]) if x not in set(df_time["time"])]
+
+        # Appending new time slices
+        df_time = df_time.append(df.loc[df["time"].isin(new_times)])
+
+        # Adding additional temporal hierarchy
+        for ti in set(df_time["time"]):
+            d = df.loc[df["time"] == ti].copy()
+            d["duration_time"] = float(df_time.loc[
+                df_time["time"] == ti, "duration_time"])
+            df_time = df_time.append(d, ignore_index=True)
     return duration, df_time, dict_xls
 
 
@@ -98,7 +114,7 @@ def time_setup(sc, df, last_year=False, remove_old_time_lvl=False):
     for i in df.index:
         d["lvl_temporal"] = df.loc[i, "lvl_temporal"]
         d["time"] = df.loc[i, "time"]
-        d["time_parent"] = df.loc[i, "parent_time"]
+        d["time_parent"] = df.loc[i, "time_parent"]
         # df = df.append(df_new, ignore_index=True)
         sc.add_set("map_temporal_hierarchy", d)
 
@@ -112,18 +128,23 @@ def time_setup(sc, df, last_year=False, remove_old_time_lvl=False):
 def duration_time(sc, df):
     sc.check_out()
     df_ref = sc.par("duration_time")
-    d = df_ref.copy()
-    sc.remove_par("duration_time", df_ref)
+    sc.remove_par("duration_time", df_ref.loc[~(df_ref["time"] == "year"), :])
 
     for i in df.index:
-        d["time"] = df.loc[i, "time"]
-        d["unit"] = "%"
         df["value"] = df.loc[i, "duration_time"]
         sc.add_par("duration_time", df)
 
-    check = sc.par("duration_time")
-    check.loc[0, "value"] = check.loc[0, "value"] + 1.00 - check["value"].sum()
-    sc.add_par("duration_time", check.loc[[0]])
+    # mapping = sc.set("map_temporal_hierarchy")
+    # for lvl in sc.set("lvl_temporal"):
+    #     times = mapping.loc[mapping["lvl_temporal"] == lvl, "time"].to_list()
+    #     parent = list(set(mapping.loc[mapping["lvl_temporal"] == lvl, "time_parent"]))
+    #     check = sc.par("duration_time")
+    #     dur = float(check.loc[check["time"].isin(parent), "value"])
+    #     check = check.loc[check["time"].isin(times)].copy()
+    #     if not check.empty:
+    #         i = min(check.index)
+    #         check.loc[i, "value"] = check.loc[i, "value"] + dur - check["value"].sum()
+    #         sc.add_par("duration_time", check.loc[[i]])
     sc.commit("duration time modified")
     print('- Parameter "duration_time" updated for new values.')
 
@@ -808,11 +829,14 @@ if __name__ == "__main__":
     n_time = 48     # number of time slices <= file ID
     file_id = "48"
 
-    path_files = r"C:\Users\zakeri\Documents\Github\time_clustering"
-    path_xls = path_files + "\\scenario work\\China\\data"
+    path_files = r"C:\Users\zakeri\Documents\Github\time_clustering\scenario_work"
+    os.chdir(path_files)
+    
+    from add_storage_tech.add_storage_v3 import add_storage
+    path_xls = path_files + "\\China\\data"
     xls_file = "input_data_" + file_id + "_" + model_family + ".xlsx"
 
-    os.chdir(path_files)
+    
 
     clone = True  # if True, clones a new scenario
     model_new = model_ref
@@ -820,6 +844,7 @@ if __name__ == "__main__":
     version_new = 1  # if clone False will be used
 
     interval = 50  # intervals for commiting to the DB (no impact on results)
+    temporal_lvls = ["subannual"] # Temporal levels for which data to be populated
     set_update = True  # if True, adds time slices and set adjustments
     last_year = None  # either int (year) or None (removes extra years)
     node_exlude = ["World"]  # nodes to be excluded from the timeslicing
@@ -884,8 +909,8 @@ if __name__ == "__main__":
     # 3) Updating sets related to time
     # Adding subannual time slices to the relevant sets
     nodes = [x for x in sc.set("node") if x not in ["World"] + node_exlude]
-    duration, df_time, dict_xls = xls_to_df(xls, n_time, nodes)
-    times = df_time["time"].tolist()
+    duration, df_time, dict_xls = xls_to_df(xls, n_time, nodes, additional_hierarchy=True)
+    times = df_time.loc[df_time["lvl_temporal"].isin(temporal_lvls), "time"].to_list()
 
     if set_update:
         time_setup(sc, df_time, last_year)
@@ -1254,3 +1279,5 @@ if __name__ == "__main__":
         round((end - start) % 60, 2),
         "sec.",
     )
+
+# %% Add storage technologies
