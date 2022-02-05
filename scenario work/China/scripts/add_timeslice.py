@@ -79,7 +79,7 @@ def xls_to_df(xls, n_time, nodes,
         df_time = df_time.append(df.loc[df["time"].isin(new_times)])
 
         # Adding additional temporal hierarchy
-        for ti in set(df_time["time"]):
+        for ti in df_time["time"].to_list():
             d = df.loc[df["time"] == ti].copy()
             d["duration_time"] = float(df_time.loc[
                 df_time["time"] == ti, "duration_time"])
@@ -130,9 +130,8 @@ def duration_time(sc, df):
     df_ref = sc.par("duration_time")
     sc.remove_par("duration_time", df_ref.loc[~(df_ref["time"] == "year"), :])
 
-    for i in df.index:
-        df["value"] = df.loc[i, "duration_time"]
-        sc.add_par("duration_time", df)
+    df["value"] = df["duration_time"]
+    sc.add_par("duration_time", df)
 
     # mapping = sc.set("map_temporal_hierarchy")
     # for lvl in sc.set("lvl_temporal"):
@@ -347,8 +346,9 @@ def rel_year_equivalent(
     remove_existing: boolean, if True all data for (rel_new) is removed
 
     """
+    sc.check_out()
     parname = "relation_activity_time"
-    for tec in tec_list:
+    for (tec, mode) in tec_list:
         rel_new = tec + "_year"
 
         # adding sets
@@ -361,6 +361,7 @@ def rel_year_equivalent(
         df = sc.par(parname, {"relation": rel_ref, "technology": tec_ref})
         df["relation"] = rel_new
         df["technology"] = tec
+        df["mode"] = mode
         df["value"] = -1
 
         # mapping with technical_lifetime
@@ -390,6 +391,7 @@ def rel_year_equivalent(
 
             df_b["relation"] = rel_new
             sc.add_par(par, df_b)
+    sc.commit("")
 
 
 # 1.11) Sorting relations based on their applicability to time slices
@@ -561,23 +563,23 @@ def relation_tec(
             "- Relation total capacity converted to activity for"
             " curtailment technologies."
         )
+    # 4) Removing relation_activity for all
+    sc.remove_par("relation_activity", sc.par("relation_activity"))
+    sc.commit("relations updated")
 
-    # 4) Adding year equivalent relation for technologies at 'time' level
+    # 5) Adding year equivalent relation for technologies at 'time' level
     print(
         "- Adding year-equivalent relations for technologies"
         " active at time slice level..."
     )
-    rel_year_equivalent(sc, tec_list)
+    rel_year_equivalent(sc, [(x, "M1") for x in tec_list])
 
-    # 5) Removing relation_activity for all
-    sc.remove_par("relation_activity", sc.par("relation_activity"))
-    sc.commit("relations updated")
     print("- Relations were successfully set up for time slices.")
     return rel_yr, rel_ti
 
 
 # 1.12) Adding mapping parameters
-def mapping_sets(sc, par_list):
+def mapping_sets(sc, par_list=["relation_upper_time", "relation_lower_time"]):
     sc.check_out()
     for parname in par_list:
         setname = "is_" + parname
@@ -813,6 +815,29 @@ def historical_to_ref(sc, year_list=[], sc_ref=None, regions=all,
                   par_list_ref[par_list.index(parname)]))
 
     sc.commit(' ')
+    
+
+# 1.17) A function for solving and calculating elapsed time
+def solution(sc, run_mode="MESSAGE", solve=True, reporting=False):
+    caseName = sc.model + "__" + sc.scenario + "__v" + str(sc.version)
+    if solve:
+        print(
+            'Solving scenario "{}" in "{}" mode, started at {}, please wait!'.format(
+                caseName, run_mode, datetime.now().strftime("%H:%M:%S")
+            )
+        )
+        start = timer()
+        sc.solve(model=run_mode, case=caseName)
+        end = timer()
+        print(
+            "Elapsed time for solving:",
+            int((end - start) / 60),
+            "min and",
+            round((end - start) % 60, 2),
+            "sec.",
+        )
+
+    sc.set_as_default()
 # %% 2) Input data and specifications
 if __name__ == "__main__":
     import ixmp as ix
@@ -835,9 +860,7 @@ if __name__ == "__main__":
     from add_storage_v3 import add_storage
     path_xls = path_files + "\\China\\data"
     xls_file = "input_data_" + file_id + "_" + model_family + ".xlsx"
-
     
-
     clone = True  # if True, clones a new scenario
     model_new = model_ref
     scenario_new = scenario_ref + "_t" + str(n_time)
@@ -1253,7 +1276,7 @@ if __name__ == "__main__":
         historical_to_ref(sc)
 
     # At the end, updating mapping sets based on new relation_act_time
-    mapping_sets(sc, par_list=["relation_upper_time", "relation_lower_time"])
+    mapping_sets(sc)
     end = timer()
 
     print(
@@ -1264,37 +1287,24 @@ if __name__ == "__main__":
         "sec.",
     )
 
-    casename = sc.model + "__" + sc.scenario + "__v" + str(sc.version)
-    print(
-        'Solving scenario "{}", started at {}, please wait...'
-        "!".format(casename, datetime.now().strftime("%H:%M:%S"))
-    )
-    start = timer()
-    sc.solve(case=casename, solve_options={"lpmethod": "4"})
-    end = timer()
-    print(
-        "Elapsed time solving scenario:",
-        int((end - start) / 60),
-        "min and",
-        round((end - start) % 60, 2),
-        "sec.",
-    )
+    # Solving
+    solution(sc)
 
-# %% Add storage technologies
+# Add storage technologies
     # Setup file for storage
     filename = 'setup_storage_CHN.xlsx'
     setup_file = path_xls + '\\' + filename
     
-    # sc = message_ix.Scenario(mp, model_ref, scenario_new, 30)
+    # sc = message_ix.Scenario(mp, model_ref, scenario_new, 33)
     
     # Adding storage setup
     sc2 = sc.clone(scenario=sc.scenario + "_stor", keep_solution=False)
     tecs = add_storage(sc2, setup_file, init_items=True)
+    
+    # Adding year-equivalent relations
+    rel_year_equivalent(sc, tecs)
+    # Updating mapping sets of relations
+    mapping_sets(sc2)
 
     # Solving
-    case2 = sc2.model + "__" + sc2.scenario + "__v" + str(sc2.version)
-    print(
-        'Solving scenario "{}", started at {}, please wait...'
-        "!".format(case2, datetime.now().strftime("%H:%M:%S"))
-    )
-    sc2.solve(case=case2, solve_options={"lpmethod": "4"})
+    solution(sc2)
