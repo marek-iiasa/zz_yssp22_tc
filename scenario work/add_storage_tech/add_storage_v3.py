@@ -306,7 +306,7 @@ def add_storage(sc, setup_file, init_items=False, remove_ref=False):
                       ', after introducing new storage technologies.')
     sc.commit('')
     print('- Storage parameterization done successfully for all technologies.')
-    return all_tecs
+    return df.index.unique().to_list()
 
 
 # Adding mapping sets of new parameters
@@ -407,13 +407,14 @@ if __name__  == ' __main__':
                                            'relation': 'gas_cc_year'})
     df_lo = sc.par('relation_lower_time', {'relation': 'gas_cc_year'})
 
-    for t in tecs:
+    for (t, m) in tecs:
         rel = t + '_year'
         sc.add_set('relation', rel)
         nodes = list(set(sc.par('output', {'technology': t})['node_loc']))
         df_t = df.loc[df['node_loc'].isin(nodes)].copy()
         df_t['relation'] = rel
         df_t['technology'] = t
+        df_t["mode"] = m
         sc.add_par('relation_activity_time', df_t)
 
         # relation upper and lower
