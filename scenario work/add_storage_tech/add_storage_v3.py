@@ -10,11 +10,7 @@ here in python)
 
 """
 import pandas as pd
-import os
 from itertools import product
-path_files = (r'C:\Users\zakeri\Documents\Github\time_clustering' +
-              r'\scenario work\add_storage_tech')
-os.chdir(path_files)
 
 
 # Initializing storage sets and parameters if needed
@@ -175,13 +171,19 @@ def add_storage(sc, setup_file, init_items=False, remove_ref=False):
             # Slicing for timeslices relevant to this technology
             df_new = df_ref.loc[df_ref["time"].isin(times)].copy()
             
+            # Updating technology and mode
+            df_new['technology'] = i[0]
+            df_new['mode'] = i[1]
+            
+            # Ensuring "time" and "time_origin"/"time_dest" match
+            time_col = [x for x in sc.idx_names(par) if "time_" in x][0]
+            df_new[time_col] = df_new["time"]
+            
             # Making sure node_dest/node_origin are the same as node_loc
             node_col = [x for x in sc.idx_names(par) if
                         'node' in x and x != 'node_loc'][0]
             df_new[node_col] = df_new['node_loc']
             
-            df_new['technology'] = i[0]
-            df_new['mode'] = i[1]
             com_list = df.loc[i, par + '_commodity']
             if not pd.isna(com_list):
                 for num, com in enumerate(com_list.split('/')):
@@ -343,24 +345,32 @@ def mapping_sets(sc, par_list=['relation_lower_time', 'relation_upper_time']):
 if __name__  == ' __main__':
     import message_ix
     import ixmp as ix
+    import os
     from timeit import default_timer as timer
     from datetime import datetime
+    
+    # Testing storage setup
+    test_storage = False
+    path_files = (r'C:\Users\zakeri\Documents\Github\time_clustering' +
+              r'\scenario work\China\data')
+    os.chdir(path_files)
 
     mp = ix.Platform(name='ene_ixmp', jvmargs=['-Xms800m', '-Xmx8g'])
 
     # test one country: 'MESSAGE_ID', 'test_t4', 3
     # test Central Asia (5 region): 'MESSAGE_CASm', 'baseline_t12', 10
+    # test China: 'MESSAGEix_China', 'baseline_t48', None
     # test global model R11: 'ENGAGE_SSP2_v4.1.2', 'baseline_t12', 13
     # test R4: 'MESSAGE_R4', 'baseline_t12', 1 (4 region)
     # test R4: 'MESSAGE_R4', 'baseline_t12', 2 (4 region, last year 2055)
     
     # Reference scenario to clone from
-    model = 'MESSAGE_R4'
-    scen_ref = 'baseline_t12'
-    version_ref = 2
+    model = 'MESSAGEix-China'
+    scen_ref = 'baseline_t48'
+    version_ref = None
     
     # File name for the Excel file of input data
-    filename = 'setup_storage.xlsx'
+    filename = 'setup_storage_CHN.xlsx'
     xls_files = path_files
     setup_file = xls_files + '\\' + filename
     
@@ -379,7 +389,7 @@ if __name__  == ' __main__':
     # Parameterization of storage
     lvl_temporal = [x for x in sc.set('lvl_temporal') if x not in ['year']][0]
     # sc.discard_changes()
-    tecs = add_storage(sc, setup_file, lvl_temporal, init_items=True)
+    tecs = add_storage(sc, setup_file, init_items=True)
     
     # Adding an unlimited source of water (this can be revisited or renamed)
     # For example, in the global model, there is water extraction level
@@ -445,6 +455,39 @@ if __name__  == ' __main__':
         print('Elapsed time for solving scenario:', int((end - start)/60),
               'min and', round((end - start) % 60, 2), 'sec.')
         sc.set_as_default()
+    
+    # Testing if storage technology works    
+    if test_storage:
+        # sc = message_ix.Scenario(mp, model, scen_ref + "_stor")
+        sc_test = sc.clone(scenario=sc.scenario + "_test", keep_solution=False)
+        sc_test.check_out()
+        
+        # Making capacity factor of PV zero in some time slices
+        df = sc.par("capacity_factor", {"technology": "solar_pv_ppl"})
+        df = df.loc[df["time"].isin(test_storage)]
+        df["value"] = 0.001
+        sc_test.add_par("capacity_factor", df)
+        
+        # Making investment cost of PV and storage near zero
+        df = sc.par("inv_cost", {"technology":
+                                 [
+                                  "solar_pv_ppl",
+                                  "battery", "battery_pcs",
+                                  "turbine", "hydro_phs",
+                                  ]})
+        df["value"] = 0.001
+        sc_test.add_par("inv_cost", df)
+        
+        # Removing "input" and "output" of reservoir technology
+        for parname in ["input", "output"]:
+            df = sc_test.par(parname, {"technology": ["battery", "hydro_phs"]})
+            sc_test.remove_par(parname, df)
+        sc_test.commit("")
+        case = sc_test.model + '__' + sc_test.scenario + '__v' + str(sc_test.version)
+        sc_test.solve(model='MESSAGE', case=case, solve_options={'lpmethod': '4'})
+    
+        
+        
     # sc.remove_solution()
     # sc.commit('')
     # sc.discard_changes()

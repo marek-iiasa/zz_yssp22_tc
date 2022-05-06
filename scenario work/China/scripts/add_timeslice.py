@@ -847,7 +847,7 @@ if __name__ == "__main__":
     start = timer()
     # model, scenario, version, suffix of Excel file
     # Country model: 'MESSAGE_China', 'baseline', 7, '48'  (cleaned up, VRE new, unit, 2110)
-    model_ref = "MESSAGEix_China"
+    model_ref = "MESSAGEix-China"
     scenario_ref = "baseline"
     version_ref = None
     model_family = "CHN"
@@ -1302,7 +1302,7 @@ if __name__ == "__main__":
     tecs = add_storage(sc2, setup_file, init_items=True)
     
     # Adding year-equivalent relations
-    rel_year_equivalent(sc, tecs)
+    rel_year_equivalent(sc2, tecs)
     # Updating mapping sets of relations
     mapping_sets(sc2)
 
