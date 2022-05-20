@@ -333,7 +333,7 @@ def rel_year_equivalent(
     tec_list,
     rel_ref="res_marg",
     tec_ref="elec_t_d",
-    rel_bound="CH4_Emission",
+    rel_bound="CO2_Emission",
     remove_existing=False,
 ):
     """
@@ -349,7 +349,7 @@ def rel_year_equivalent(
     sc.check_out()
     parname = "relation_activity_time"
     for (tec, mode) in tec_list:
-        rel_new = tec + "_year"
+        rel_new = tec + "_" + mode + "_year"
 
         # adding sets
         if remove_existing and rel_new in set(sc.set("relation")):
@@ -357,11 +357,20 @@ def rel_year_equivalent(
 
         sc.add_set("relation", rel_new)
 
-        # The part for technologies in 'time' slices'
-        df = sc.par(parname, {"relation": rel_ref, "technology": tec_ref})
+        # The part for technologies in 'time' slices from "input" or "output"
+        df = sc.par("input", {"technology": tec, "mode": mode})
+        if df.empty:
+            df = sc.par("output", {"technology": tec, "mode": mode})
+        if df.empty:    
+            df = sc.par(parname, {"relation": rel_ref, "technology": tec_ref})
+            df["technology"] = tec
+            df["mode"] = mode
+        # Converting to relation_activity_time
+        else:
+            df["node_rel"] = df["node_loc"]
+            df["year_rel"] = df["year_act"]
+            df = df.drop_duplicates(["year_rel", "year_act", "time"])
         df["relation"] = rel_new
-        df["technology"] = tec
-        df["mode"] = mode
         df["value"] = -1
 
         # mapping with technical_lifetime
@@ -442,7 +451,7 @@ def relation_tec(
 
         # technologies in this relation that must be at time level
         tec_time = [x for x in set(d["technology"]) if x in tec_list]
-        tec_time = tec_time + tec_free
+        tec_time = set(tec_time + tec_free)
 
         # if all tecs at time slices, then the relation at time level
         if len(tec_time) == len(set(d["technology"])):
@@ -503,16 +512,18 @@ def relation_tec(
         (df["relation"].isin(rel_yr_ti)) & (df["technology"].isin(tec_list))
     ].copy()
 
-    for ti in times:
-        df_ti.loc[:, "time"] = ti
-        sc.add_par("relation_activity_time", df_ti)
+    if not df_ti.empty:
+        for ti in times:
+            df_ti.loc[:, "time"] = ti
+            sc.add_par("relation_activity_time", df_ti)
 
     # 2) adding relations for time level
     df = sc.par("relation_activity", {"relation": rel_ti, "year_act": yr_list})
-    for ti in times:
-        df.loc[:, "time"] = ti
-        sc.add_par("relation_activity_time", df)
-    print("- Relation activity for relations at time slice level added.")
+    if not df.empty:
+        for ti in times:
+            df.loc[:, "time"] = ti
+            sc.add_par("relation_activity_time", df)
+        print("- Relation activity for relations at time slice level added.")
 
     for relname in ["relation_upper", "relation_lower"]:
         df = sc.par(relname)
@@ -566,15 +577,6 @@ def relation_tec(
     # 4) Removing relation_activity for all
     sc.remove_par("relation_activity", sc.par("relation_activity"))
     sc.commit("relations updated")
-
-    # 5) Adding year equivalent relation for technologies at 'time' level
-    print(
-        "- Adding year-equivalent relations for technologies"
-        " active at time slice level..."
-    )
-    rel_year_equivalent(sc, [(x, "M1") for x in tec_list])
-
-    print("- Relations were successfully set up for time slices.")
     return rel_yr, rel_ti
 
 
@@ -1077,11 +1079,19 @@ if __name__ == "__main__":
             n1 = n1 + interval
         print('- Time slices added to "{}".'.format(parname))
     print("- All parameters sucessfully modified for time slices.")
+    
+    # 5) Adding year equivalent relation for technologies at 'time' level
+    print(
+        "- Adding year-equivalent relations for technologies"
+        " active at time slice level..."
+    )
+    rel_year_equivalent(sc, [(x, "M1") for x in tec_list])
 
+    print("- Relations were successfully set up for time slices.")
     # -------------------------------------------------------------------------
     # 5) Doing some adjustments and solving
     sc.check_out()
-
+    yr_list = [int(x) for x in sc.set("year") if int(x) >= sc.firstmodelyear]
     # Finding other commodity/levels that must be at the time slice level
     # 1) Correcting input of tec_inp technologies
     com_div = []
@@ -1101,8 +1111,6 @@ if __name__ == "__main__":
     for x in com_div:
         tec = x[0] + "_divider"
         sc.add_set("technology", tec)
-
-        yr_list = [int(x) for x in sc.set("year") if int(x) >= sc.firstmodelyear]
         df = sc.par(
             "input",
             {
@@ -1290,21 +1298,36 @@ if __name__ == "__main__":
     # Solving
     solution(sc)
 
-# Add storage technologies
+# %% Add storage technologies
     # Setup file for storage
     filename = 'setup_storage_CHN.xlsx'
     setup_file = path_xls + '\\' + filename
     
-    # sc = message_ix.Scenario(mp, model_ref, scenario_new, 33)
+    # sc = message_ix.Scenario(mp, model_ref, scenario_new)
     
     # Adding storage setup
     sc2 = sc.clone(scenario=sc.scenario + "_stor", keep_solution=False)
+    start = timer()
     tecs = add_storage(sc2, setup_file, init_items=True)
+    # NOTICE: if storage charger needs input commodity, this must be added by user
+    
     
     # Adding year-equivalent relations
-    rel_year_equivalent(sc2, tecs)
+    rel_year_equivalent(sc2, tecs, rel_ref="elec_t_d_M1_year")
+    
     # Updating mapping sets of relations
     mapping_sets(sc2)
+    
+    # sc2 = message_ix.Scenario(mp, model_ref, scenario_new + "_stor", 3)
+    # sc2 = sc2.clone(keep_solution=False)
+    end = timer()
+    print(
+        "Elapsed time for adding storage solutions:",
+        int((end - start) / 60),
+        "min and",
+        round((end - start) % 60, 2),
+        "sec.",
+    )
 
     # Solving
     solution(sc2)
