@@ -945,11 +945,11 @@ if __name__ == "__main__":
     # model, scenario, version, suffix of Excel file
     # Country model: 'MESSAGE_China', 'baseline', 7, '48'  (cleaned up, VRE new, unit, 2110)
     model_ref = "MESSAGEix-China"
-    scenario_ref = "baseline"
+    scenario_ref = "baseline_c"
     version_ref = None
     model_family = "CHN"
-    n_time = 48     # number of time slices <= file ID
-    file_id = "48"
+    n_time = 16     # number of time slices <= file ID
+    file_id = "16"
 
     path_files = r"C:\Users\zakeri\Documents\Github\time_clustering\scenario work"
     os.chdir(path_files + "\\add_storage_tech")

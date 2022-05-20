@@ -244,18 +244,23 @@ def add_storage(sc, setup_file, init_items=False, remove_ref=False):
                 sc.add_par(parname, hist)
                 removal = removal + [(parname, tec_hist, nodes)]
 
-        # 4.3.2) Transferring relation activity (Notice: relation capacity?)
-        if not pd.isna(df.loc[i, 'relation']):
-            tec_rel = df.loc[i, 'relation']
-            parname = 'relation_activity_time'
-            rel = sc.par(parname, {'technology': tec_rel, 'node_loc': nodes,
-                                   "time": times})
+        # 4.3.2) Transferring relation activity and capacity
+        if not pd.isna(df.loc[i, 'tec_relation_from']):
+            tec_rel = df.loc[i, 'tec_relation_from']
+            for parname in ["relation_total_capacity", 'relation_activity_time']:
+                relations = df.loc[i, parname].split("/")
+                for r in relations:
+                    rel = sc.par(parname, {'technology': tec_rel, 'node_rel': nodes,
+                                           "relation": r.split(":")[0]})
+                    if "activity" in parname:
+                        # rel = rel.loc[rel["time"].isin(times)].copy()
+                        rel["mode"] = i[1]
+                    # Multiplying value in the multiplier
+                    rel["value"] *= float(r.split(":")[1])
             
-            # Adding new data
-            rel['technology'] = i[0]
-            rel["mode"] = i[1]
-            sc.add_par(parname, rel)
-            removal = removal + [(parname, tec_rel, nodes)]
+                    # Adding new data
+                    rel['technology'] = i[0]
+                    sc.add_par(parname, rel)
 
         # 4.3) Adding all other parameters and changes in values specified in Excel
         # Excluding bound and relations
@@ -285,7 +290,7 @@ def add_storage(sc, setup_file, init_items=False, remove_ref=False):
             if "mode" in sc.idx_sets(parname):
                 d["mode"] = i[1]
             for node_r, node_n in zip(nodes_ref, nodes):
-                        d = d.replace({node_r: node_n})
+                d = d.replace({node_r: node_n})
             
             # Slicing correct timeslices
             if "time" in d.columns:
@@ -342,7 +347,7 @@ def mapping_sets(sc, par_list=['relation_lower_time', 'relation_upper_time']):
 
 
 # %% Sample input data
-if __name__  == ' __main__':
+if __name__ == "__main__":
     import message_ix
     import ixmp as ix
     import os
@@ -350,7 +355,6 @@ if __name__  == ' __main__':
     from datetime import datetime
     
     # Testing storage setup
-    test_storage = False
     path_files = (r'C:\Users\zakeri\Documents\Github\time_clustering' +
               r'\scenario work\China\data')
     os.chdir(path_files)
@@ -366,7 +370,7 @@ if __name__  == ' __main__':
     
     # Reference scenario to clone from
     model = 'MESSAGEix-China'
-    scen_ref = 'baseline_t48'
+    scen_ref = 'baseline_c_t16'
     version_ref = None
     
     # File name for the Excel file of input data
@@ -413,9 +417,9 @@ if __name__  == ' __main__':
         sc.add_par('output', df)
     
     # Adding relation activity for year equivalent of each storage technology
-    df = sc.par('relation_activity_time', {'technology': 'gas_cc',
-                                           'relation': 'gas_cc_year'})
-    df_lo = sc.par('relation_lower_time', {'relation': 'gas_cc_year'})
+    df = sc.par('relation_activity_time', {'technology': 'gas_ppl',
+                                           'relation': 'gas_ppl_year'})
+    df_lo = sc.par('relation_lower_time', {'relation': 'gas_ppl_year'})
 
     for (t, m) in tecs:
         rel = t + '_year'
@@ -455,36 +459,7 @@ if __name__  == ' __main__':
         print('Elapsed time for solving scenario:', int((end - start)/60),
               'min and', round((end - start) % 60, 2), 'sec.')
         sc.set_as_default()
-    
-    # Testing if storage technology works    
-    if test_storage:
-        # sc = message_ix.Scenario(mp, model, scen_ref + "_stor")
-        sc_test = sc.clone(scenario=sc.scenario + "_test", keep_solution=False)
-        sc_test.check_out()
-        
-        # Making capacity factor of PV zero in some time slices
-        df = sc.par("capacity_factor", {"technology": "solar_pv_ppl"})
-        df = df.loc[df["time"].isin(test_storage)]
-        df["value"] = 0.001
-        sc_test.add_par("capacity_factor", df)
-        
-        # Making investment cost of PV and storage near zero
-        df = sc.par("inv_cost", {"technology":
-                                 [
-                                  "solar_pv_ppl",
-                                  "battery", "battery_pcs",
-                                  "turbine", "hydro_phs",
-                                  ]})
-        df["value"] = 0.001
-        sc_test.add_par("inv_cost", df)
-        
-        # Removing "input" and "output" of reservoir technology
-        for parname in ["input", "output"]:
-            df = sc_test.par(parname, {"technology": ["battery", "hydro_phs"]})
-            sc_test.remove_par(parname, df)
-        sc_test.commit("")
-        case = sc_test.model + '__' + sc_test.scenario + '__v' + str(sc_test.version)
-        sc_test.solve(model='MESSAGE', case=case, solve_options={'lpmethod': '4'})
+
     
         
         
