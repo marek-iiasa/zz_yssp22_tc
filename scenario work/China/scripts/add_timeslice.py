@@ -21,6 +21,7 @@ import os
 from itertools import product
 from datetime import datetime
 from timeit import default_timer as timer
+from message_ix.utils import make_df
 
 # 1.1) A function for reading input data from excel and formatting as needed
 def xls_to_df(xls, n_time, nodes,
@@ -818,10 +819,104 @@ def historical_to_ref(sc, year_list=[], sc_ref=None, regions=all,
 
     sc.commit(' ')
     
+# 1.17) Adding a simple water inflow-demand setup
+def add_water_setup(sc, node, water_commodity='water',
+                    water_supply_tec='water_inflow',
+                    water_spillage_tec="water_spillage",
+                    water_inflow_level = "water_upstream",
+                    water_demand_level = "water_downstream",
+                    add_bound_water_supply = {},
+                    add_water_demand={},
+                    ):
+    '''
+    Add a small water inflow-demand setup
 
-# 1.17) A function for solving and calculating elapsed time
-def solution(sc, run_mode="MESSAGE", solve=True, reporting=False):
-    caseName = sc.model + "__" + sc.scenario + "__v" + str(sc.version)
+    Parameters
+    ----------
+    sc : message_ix.Scenario
+    node : string
+        Node name for modifications.
+    water_commodity : string, optional
+        Water commodity name. The default is 'water'.
+    water_supply_tec : string, optional
+        Water supply technology name. The default is 'water_inflow'.
+    water_spillage_tec : string, optional
+        Water spillage connecting supply directly to demand. The default is "water_spillage".
+    water_inflow_level : string, optional
+        Water inflow "level" name. The default is "water_upstream".
+    water_demand_level : string, optional
+        Water "demand" "level" name. The default is "water_downstream".
+    add_bound_water_supply : dict, optional
+        Upper bound on activity of water supply technology per "time". The default is {}.
+    add_water_demand : dict, optional
+        Water "demand" per "time". The default is {}.
+
+    '''
+
+#    add_bound_water_supply = {"1": 20, "4": 20, }
+    sc.check_out()
+    model_years = [x for x in set(sc.set("year")) if x >= sc.firstmodelyear]
+    sc.add_set('technology', [water_supply_tec, water_spillage_tec])
+    tec_water = [("turbine", "Cha")]
+    
+    for tec, mode in tec_water:
+        # Adding output for water supply
+        df = sc.par('output', {'technology': tec, "mode": mode})
+        df['technology'] = water_supply_tec
+        df["mode"] = "M1"
+        df['level'] = list(set(sc.par('input', {'technology': tec, "mode": mode,
+                                      'commodity': water_commodity})['level']))[0]
+        sc.add_par('output', df)
+        
+        # Adding input/output for water spillage
+        df["technology"] = water_spillage_tec
+        df["level"] = water_demand_level
+        sc.add_par('output', df)
+        
+        # Adding input for water spillage
+        df["level"] = water_inflow_level
+        df = df.rename({"time_dest": "time_origin", "node_dest": "node_origin"},
+                       axis=1)
+        sc.add_par('input', df)
+        
+    # Adding bounds on supply of water 
+    if add_bound_water_supply:
+        for ti, val in add_bound_water_supply.items():
+            bound = {"technology": water_supply_tec,
+                     "mode": "M1",
+                     "time": ti,
+                     "node_loc": node,
+                     "value": val,
+                     "unit": "-",
+                     }
+            for yr in model_years:
+                bd = make_df("bound_activity_up", **bound, year_act=yr)
+                sc.add_par("bound_activity_up", bd)
+            
+    # Adding water demand
+    if add_water_demand:
+        for ti, val in add_water_demand.items():
+            demand = {"commodity": water_commodity,
+                     "time": ti,
+                     "level": water_demand_level,
+                     "node": node,
+                     "value": val,
+                     "unit": "-",
+                     }
+            for yr in model_years:
+                dem = make_df("demand", **demand, year=yr)
+                sc.add_par("demand", dem)
+    sc.commit('')           
+    print("- Water inflow/demand setup added.")
+
+
+# 1.18) A function for solving and calculating elapsed time
+def solution(sc, run_mode="MESSAGE", solve=True, reporting=False, versioning=False):
+    if versioning:
+        caseName = sc.model + "__" + sc.scenario + "__v" + str(sc.version)
+    else:
+        caseName = sc.model + "__" + sc.scenario
+        
     if solve:
         print(
             'Solving scenario "{}" in "{}" mode, started at {}, please wait!'.format(
@@ -1317,6 +1412,10 @@ if __name__ == "__main__":
     
     # Updating mapping sets of relations
     mapping_sets(sc2)
+    
+    # Adding water inflow
+    for node in nodes:
+        add_water_setup(sc2, node)
     
     # sc2 = message_ix.Scenario(mp, model_ref, scenario_new + "_stor", 3)
     # sc2 = sc2.clone(keep_solution=False)
